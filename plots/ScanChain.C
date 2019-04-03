@@ -12,6 +12,8 @@
 #include "TFile.h"
 #include "TROOT.h"
 #include "TTreeCache.h"
+#include "TCanvas.h"
+#include "TLegend.h"
 
 // StopCMS3
 #include "StopCMS3.cc"
@@ -56,6 +58,9 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 40, 0, 100);
   htopnessMod->SetDirectory(rootdir);
 
+  //Canvas definition
+  TCanvas *c0 = new TCanvas("c0","c0",800,800);
+  //c0->SetDirectory(rootdir);
 
   // Loop over events to Analyze
   unsigned int nEventsTotal = 0;
@@ -120,6 +125,22 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   
   // Example Histograms
 //  hpfmet->Draw();
+
+  c0->cd();
+  hpfmet->SetStats(false);
+  hpfmet->SetLineWidth(3);
+  hpfmet->SetLineColor(kRed);
+  hpfmet->GetXaxis()->SetTitle("MET [GeV]");
+  hpfmet->DrawNormalized();
+  hmt_met_lep->SetStats(false);
+  hmt_met_lep->SetLineWidth(3);
+  hmt_met_lep->SetLineColor(kBlue);
+  hmt_met_lep->DrawNormalized("same");
+
+  TLegend* leg0 = new TLegend(1,1,1,1);
+  leg0->AddEntry(hpfmet,"FullSim Sample");
+  leg0->AddEntry(hmt_met_lep,"FastSim Sample");
+  leg0->Draw();
   
 
   //Output file for Histograms
@@ -138,6 +159,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hMT2);
   //fNumbers->Add(hMCT);
   fNumbers->Add(htopnessMod);
+  fNumbers->Add(c0);
   fNumbers->Write();  
   fNumbers->Close();
 
