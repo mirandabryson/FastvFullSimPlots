@@ -58,9 +58,37 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 40, 0, 100);
   htopnessMod->SetDirectory(rootdir);
 
+  //Defining fastsim histos
+  TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,800);
+  hpfmet_fastsim->SetDirectory(rootdir);
+  //TH1F *hmht_fastsim = new TH1F("hmht_fastsim", "mht", 40, 0, 800);
+  //hmht_fastsim->SetDirectory(rootdir);
+  //TH1F *hv2met_fastsim = new TH1F("hv2met_fastsim", "v2met", 40, 0, 800);
+  //hv2met_fastsim->SetDirectory(rootdir);
+  TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 40, 0, 800);
+  hmt_met_lep_fastsim->SetDirectory(rootdir);
+  //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
+  //hlepkinpt_fastsim->SetDirectory(rootdir);
+  //TH1F *hlepkineta_fastsim = new TH1F("hlepkineta_fastsim", "lepkineta", 40, 0, 800);
+  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 40, 0, 100);
+  hngoodjets_fastsim->SetDirectory(rootdir);
+  //TH1F *hpt_fastsim = new TH1F("hpt_fastsim", "pt", 40, 0, 800);
+  //hpt_fastsim->SetDirectory(rootdir);
+  //TH1F *heta_fastsim - new TH1F("heta_fastsim", "eta", 40, 0, 800);
+  //heta_fastsim->SetDirectory(rootdir);
+  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 40, 0, 100);
+  hlep1_dphiMET_fastsim->SetDirectory(rootdir);
+  //TH1F *hj1dphiMETl_fastsim = new TH1F("hj1dphiMET_fastsim", "j1dphiMET", 40, 0, 800);
+  //hj1dphiMET_fastsim->SetDirectory(rootdir);
+  //TH1F *hMT2_fastsim = new TH1F("hMT2_fastsim", "MT2", 40, 0, 800);
+  //hMT2_fastsim->SetDirectory(rootdir);
+  //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
+  //hMCT_fastsim->SetDirectory(rootdir);
+  TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 40, 0, 100);
+  htopnessMod_fastsim->SetDirectory(rootdir);
+
   //Canvas definition
   TCanvas *c0 = new TCanvas("c0","c0",800,800);
-  //c0->SetDirectory(rootdir);
 
   // Loop over events to Analyze
   unsigned int nEventsTotal = 0;
@@ -80,6 +108,9 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
     if (fast) tree->SetCacheSize(128*1024*1024);
     stopcms3.Init(tree);
 
+    string fileName = file.GetName();
+    string fileCut = "fastsim";
+    
     // Loop over Events in current file
     if (nEventsTotal >= nEventsChain) continue;
     unsigned int nEventsTree = tree->GetEntriesFast();
@@ -97,22 +128,43 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
       // Analysis Code
       // this is where we put cuts like pfmet>150 : if(pfmet()<150) continue;
 
+      if(fileName.find(fileCut) != string::npos){
+	//if "fastsim" is in the file title, fill only the fastsim histos
+    
+	//Fill Histograms
+	hpfmet_fastsim->Fill(pfmet());
+	//hmht_fastsim->Fill(mht());
+	//hv2met_fastsim->Fill(v2met();
+	hmt_met_lep_fastsim->Fill(mt_met_lep());
+	//hlepkinpt_fastsim->Fill(lepkinpt());
+	//hlepkineta_fastsim->Fill(lepkineta());
+	hngoodjets_fastsim->Fill(ngoodjets());
+	//hpt_fastsim->Fill(pt());
+	//heta_fastsim->Fill(eta());
+	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET());
+	//hj1dphiMET_fastsim->Fill(j1dphiMET());
+	//hMT2_fastsim->Fill(MT2());
+	//hMCT_fastsim->Fill(MCT());
+	htopnessMod_fastsim->Fill(topnessMod());
+      } else{
+	//if "fastsim" isn't in the title, then fill these histos instead
 
-      //Fill Histograms
-      hpfmet->Fill(pfmet());
-      //hmht->Fill(mht());
-      //hv2met->Fill(v2met();
-      hmt_met_lep->Fill(mt_met_lep());
-      //hlepkinpt->Fill(lepkinpt());
-      //hlepkineta->Fill(lepkineta());
-      hngoodjets->Fill(ngoodjets());
-      //hpt->Fill(pt());
-      //heta->Fill(eta());
-      hlep1_dphiMET->Fill(lep1_dphiMET());
-      //hj1dphiMET->Fill(j1dphiMET());
-      //hMT2->Fill(MT2());
-      //hMCT->Fill(MCT());
-      htopnessMod->Fill(topnessMod());
+	//Fill Histograms
+	hpfmet->Fill(pfmet());
+	//hmht->Fill(mht());
+	//hv2met->Fill(v2met();
+	hmt_met_lep->Fill(mt_met_lep());
+	//hlepkinpt->Fill(lepkinpt());
+	//hlepkineta->Fill(lepkineta());
+	hngoodjets->Fill(ngoodjets());
+	//hpt->Fill(pt());
+	//heta->Fill(eta());
+	hlep1_dphiMET->Fill(lep1_dphiMET());
+	//hj1dphiMET->Fill(j1dphiMET());
+	//hMT2->Fill(MT2());
+	//hMCT->Fill(MCT());
+	htopnessMod->Fill(topnessMod());
+      }
     }
   
     // Clean Up
@@ -132,14 +184,14 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hpfmet->SetLineColor(kRed);
   hpfmet->GetXaxis()->SetTitle("MET [GeV]");
   hpfmet->DrawNormalized();
-  hmt_met_lep->SetStats(false);
-  hmt_met_lep->SetLineWidth(3);
-  hmt_met_lep->SetLineColor(kBlue);
-  hmt_met_lep->DrawNormalized("same");
+  hpfmet_fastsim->SetStats(false);
+  hpfmet_fastsim->SetLineWidth(3);
+  hpfmet_fastsim->SetLineColor(kBlue);
+  hpfmet_fastsim->DrawNormalized("same");
 
-  TLegend* leg0 = new TLegend(1,1,1,1);
+  TLegend* leg0 = new TLegend(0.1,0.7,0.48,0.9);
   leg0->AddEntry(hpfmet,"FullSim Sample");
-  leg0->AddEntry(hmt_met_lep,"FastSim Sample");
+  leg0->AddEntry(hpfmet_fastsim,"FastSim Sample");
   leg0->Draw();
   
 
@@ -159,6 +211,20 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hMT2);
   //fNumbers->Add(hMCT);
   fNumbers->Add(htopnessMod);
+  fNumbers->Add(hpfmet_fastsim);
+  //fNumbers->Add(hmht_fastsim);
+  //fNumbers->Add(hv2met_fastsim);
+  fNumbers->Add(hmt_met_lep_fastsim);
+  //fNumbers->Add(hlepkinpt_fastsim);
+  //fNumbers->Add(hlepkineta_fastsim);
+  fNumbers->Add(hngoodjets_fastsim);
+  //fNumbers->Add(hpt_fastsim);
+  //fNumbers->Add(heta_fastsim);
+  fNumbers->Add(hlep1_dphiMET_fastsim);
+  //fNumbers->Add(hj1dphiMET_fastsim);
+  //fNumbers->Add(hMT2_fastsim);
+  //fNumbers->Add(hMCT_fastsim);
+  fNumbers->Add(htopnessMod_fastsim);
   fNumbers->Add(c0);
   fNumbers->Write();  
   fNumbers->Close();
