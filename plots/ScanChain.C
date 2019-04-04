@@ -49,8 +49,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //heta->SetDirectory(rootdir);
   TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 40, 0, 100);
   hlep1_dphiMET->SetDirectory(rootdir);
-  //TH1F *hj1dphiMETl = new TH1F("hj1dphiMET", "j1dphiMET", 40, 0, 800);
-  //hj1dphiMET->SetDirectory(rootdir);
+  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 40, 0, 800);
+  hmindphi_met_j1_j2->SetDirectory(rootdir);
   //TH1F *hMT2 = new TH1F("hMT2", "MT2", 40, 0, 800);
   //hMT2->SetDirectory(rootdir);
   //TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
@@ -78,8 +78,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //heta_fastsim->SetDirectory(rootdir);
   TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 40, 0, 100);
   hlep1_dphiMET_fastsim->SetDirectory(rootdir);
-  //TH1F *hj1dphiMETl_fastsim = new TH1F("hj1dphiMET_fastsim", "j1dphiMET", 40, 0, 800);
-  //hj1dphiMET_fastsim->SetDirectory(rootdir);
+  TH1F *hmindphi_met_j1_j2_fastsim = new TH1F("hmindphi_met_j1_j2_fastsim", "hmindphi_met_j1_j2", 40, 0, 800);
+  hmindphi_met_j1_j2_fastsim->SetDirectory(rootdir);
   //TH1F *hMT2_fastsim = new TH1F("hMT2_fastsim", "MT2", 40, 0, 800);
   //hMT2_fastsim->SetDirectory(rootdir);
   //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
@@ -142,7 +142,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	//hpt_fastsim->Fill(pt());
 	//heta_fastsim->Fill(eta());
 	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET());
-	//hj1dphiMET_fastsim->Fill(j1dphiMET());
+	hmindphi_met_j1_j2_fastsim->Fill(j1dphiMET());
 	//hMT2_fastsim->Fill(MT2());
 	//hMCT_fastsim->Fill(MCT());
 	htopnessMod_fastsim->Fill(topnessMod());
@@ -160,7 +160,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	//hpt->Fill(pt());
 	//heta->Fill(eta());
 	hlep1_dphiMET->Fill(lep1_dphiMET());
-	//hj1dphiMET->Fill(j1dphiMET());
+	hmindphi_met_j1_j2->Fill(j1dphiMET());
 	//hMT2->Fill(MT2());
 	//hMCT->Fill(MCT());
 	htopnessMod->Fill(topnessMod());
@@ -176,7 +176,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   }
   
   // Example Histograms
-//  hpfmet->Draw();
+  //  hpfmet->Draw();
 
   c0->cd();
   hpfmet->SetStats(false);
@@ -193,7 +193,256 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   leg0->AddEntry(hpfmet,"FullSim Sample");
   leg0->AddEntry(hpfmet_fastsim,"FastSim Sample");
   leg0->Draw();
+
+
+  //c0->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg0 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg0->AddEntry( ,"FullSim Sample");
+  //leg0->AddEntry( ,"FastSim Sample");
+  //leg0->Draw;
+
+
+  //c1->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg1 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg1->AddEntry( ,"FullSim Sample");
+  //leg1->AddEntry( ,"FastSim Sample");
+  //leg1->Draw;
+
+
+  //c2->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg2 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg2->AddEntry( ,"FullSim Sample");
+  //leg2->AddEntry( ,"FastSim Sample");
+  //leg2->Draw;
+
+
+  //c3->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg3 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg3->AddEntry( ,"FullSim Sample");
+  //leg3->AddEntry( ,"FastSim Sample");
+  //leg3->Draw;
+
+
+  //c4->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg4 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg4->AddEntry( ,"FullSim Sample");
+  //leg4->AddEntry( ,"FastSim Sample");
+  //leg4->Draw;
   
+
+  //c5->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg5 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg5->AddEntry( ,"FullSim Sample");
+  //leg5->AddEntry( ,"FastSim Sample");
+  //leg5->Draw;
+
+
+  //c6->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg6 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg6->AddEntry( ,"FullSim Sample");
+  //leg6->AddEntry( ,"FastSim Sample");
+  //leg6->Draw;
+
+
+  //c7->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg7 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg7->AddEntry( ,"FullSim Sample");
+  //leg7->AddEntry( ,"FastSim Sample");
+  //leg7->Draw;
+
+  //c8->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg8 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg8->AddEntry( ,"FullSim Sample");
+  //leg8->AddEntry( ,"FastSim Sample");
+  //leg8->Draw;
+
+
+  //c9->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg9 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg9->AddEntry( ,"FullSim Sample");
+  //leg9->AddEntry( ,"FastSim Sample");
+  //leg9->Draw;
+
+
+  //c10->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg10 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg10->AddEntry( ,"FullSim Sample");
+  //leg10->AddEntry( ,"FastSim Sample");
+  //leg10->Draw;
+
+
+  //c11->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg11 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg11->AddEntry( ,"FullSim Sample");
+  //leg11->AddEntry( ,"FastSim Sample");
+  //leg11->Draw;
+
+  //c12->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg12 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg12->AddEntry( ,"FullSim Sample");
+  //leg12->AddEntry( ,"FastSim Sample");
+  //leg12->Draw;
+
+  //c13->cd();
+  //h_ ->SetStats(false);
+  //h_->SetLineWidth(3);
+  //h_ ->SetLineColor(kRed);
+  //h_ ->GetXaxis()->SetTitle(" ");
+  //h_DrawNormalized();
+  //h_fastsim->SetStats(false);
+  //h_fastsim->SetLineWidth(3);
+  //h_fastsim->SetLineColor(kBlue);
+  //h_fastsim->DrawNormalized("same");
+
+
+  //TLegend* leg13 = newTLegend(0.1,0.7.0.48,0.9);
+  //leg13->AddEntry( ,"FullSim Sample");
+  //leg13->AddEntry( ,"FastSim Sample");
+  //leg13->Draw;
+
 
   //Output file for Histograms
   TFile *fNumbers = new TFile("MirandasPlots.root","recreate");
@@ -207,7 +456,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hpt);
   //fNumbers->Add(heta);
   fNumbers->Add(hlep1_dphiMET);
-  //fNumbers->Add(hj1dphiMET);
+  fNumbers->Add(hmindphi_met_j1_j2);
   //fNumbers->Add(hMT2);
   //fNumbers->Add(hMCT);
   fNumbers->Add(htopnessMod);
@@ -221,11 +470,24 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hpt_fastsim);
   //fNumbers->Add(heta_fastsim);
   fNumbers->Add(hlep1_dphiMET_fastsim);
-  //fNumbers->Add(hj1dphiMET_fastsim);
+  fNumbers->Add(hmindphi_met_j1_j2_fastsim);
   //fNumbers->Add(hMT2_fastsim);
   //fNumbers->Add(hMCT_fastsim);
   fNumbers->Add(htopnessMod_fastsim);
   fNumbers->Add(c0);
+  fNumbers->Add(c1);
+  fNumbers->Add(c2);
+  fNumbers->Add(c3);
+  fNumbers->Add(c4);
+  fNumbers->Add(c5);
+  fNumbers->Add(c6);
+  fNumbers->Add(c7);
+  fNumbers->Add(c8);
+  fNumbers->Add(c9);
+  fNumbers->Add(c10);
+  fNumbers->Add(c11);
+  fNumbers->Add(c12);
+  fNumbers->Add(c13);
   fNumbers->Write();  
   fNumbers->Close();
 
