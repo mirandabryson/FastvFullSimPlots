@@ -57,6 +57,12 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMCT->SetDirectory(rootdir);
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 40, 0, 100);
   htopnessMod->SetDirectory(rootdir);
+  TH1F *ngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
+  hngoodleps->SetDirectory(rootdir);
+  TH1F *ngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 40, 0, 100);
+  hngoodbtags->SetDirectory(rootdir);
+  TH1F *hgenht = new TH1F("hgenht", "genht", 40, 0, 100);
+  hgenht->SetDirectory(rootdir);
 
   //Defining fastsim histos
   TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,800);
@@ -86,6 +92,15 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMCT_fastsim->SetDirectory(rootdir);
   TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 40, 0, 100);
   htopnessMod_fastsim->SetDirectory(rootdir);
+  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 40, 0, 100);
+  hngoodleps_fastsim->SetDirectory(rootdir);
+  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 40, 0, 100);
+  hngoodbtags_fastsim->SetDirectory(rootdir);
+  TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 40, 0, 100);
+  htopnessMod_fastsim->SetDirectory(rootdir);
+ 
+
+
 
   //Canvas definition
   TCanvas *c0 = new TCanvas("c0","c0",800,800);
@@ -146,6 +161,9 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	//hMT2_fastsim->Fill(MT2());
 	//hMCT_fastsim->Fill(MCT());
 	htopnessMod_fastsim->Fill(topnessMod());
+	hngoodleps_fastsim->Fill(ngoodleps());
+	hngoodbtags_fastsim->Fill(ngoodbtags());
+	hgenht_fastsim->Fill(genht());
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
 
@@ -164,6 +182,10 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	//hMT2->Fill(MT2());
 	//hMCT->Fill(MCT());
 	htopnessMod->Fill(topnessMod());
+	hngoodleps->Fill(ngoodleps());
+	hngoodbtags->Fill(ngoodbtags());
+	hgenht->Fill(genht());
+
       }
     }
   
@@ -460,6 +482,10 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hMT2);
   //fNumbers->Add(hMCT);
   fNumbers->Add(htopnessMod);
+  fNumbers->Add(hngoodleps);
+  fNumbers->Add(hngoodbtags);
+  fNumbers->Add(hgenht);
+
   fNumbers->Add(hpfmet_fastsim);
   //fNumbers->Add(hmht_fastsim);
   //fNumbers->Add(hv2met_fastsim);
@@ -474,6 +500,10 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(hMT2_fastsim);
   //fNumbers->Add(hMCT_fastsim);
   fNumbers->Add(htopnessMod_fastsim);
+  fNumbers->Add(hngoodleps_fastsim);
+  fNumbers->Add(hngoodbtags_fastsim);
+  fNumbers->Add(hgenht_fastsim);
+
   fNumbers->Add(c0);
   fNumbers->Add(c1);
   fNumbers->Add(c2);
