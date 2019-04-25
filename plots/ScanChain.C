@@ -41,13 +41,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt = new TH1F("hlepkinpt", "lepkinpt", 40, 0, 800);
   //hlepkinpt->SetDirectory(rootdir);
   //TH1F *hlepkineta = new TH1F("hlepkineta", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 40, 0, 100);
+  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 10, 0, 10);
   hngoodjets->SetDirectory(rootdir);
   //TH1F *hpt = new TH1F("hpt", "pt", 40, 0, 800);
   //hpt->SetDirectory(rootdir);
   //TH1F *heta - new TH1F("heta", "eta", 40, 0, 800);
   //heta->SetDirectory(rootdir);
-  TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 40, 0, 100);
+  TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 5, 0, 5);
   hlep1_dphiMET->SetDirectory(rootdir);
   TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 40, 0, 800);
   hmindphi_met_j1_j2->SetDirectory(rootdir);
@@ -55,7 +55,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMT2->SetDirectory(rootdir);
   //TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
   //hMCT->SetDirectory(rootdir);
-  TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 40, 0, 100);
+  TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 30, -10, 20);
   htopnessMod->SetDirectory(rootdir);
   TH1F *ngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
   hngoodleps->SetDirectory(rootdir);
@@ -76,7 +76,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
   //hlepkinpt_fastsim->SetDirectory(rootdir);
   //TH1F *hlepkineta_fastsim = new TH1F("hlepkineta_fastsim", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 40, 0, 100);
+  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 10, 0, 10);
   hngoodjets_fastsim->SetDirectory(rootdir);
   //TH1F *hpt_fastsim = new TH1F("hpt_fastsim", "pt", 40, 0, 800);
   //hpt_fastsim->SetDirectory(rootdir);
@@ -90,7 +90,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMT2_fastsim->SetDirectory(rootdir);
   //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
   //hMCT_fastsim->SetDirectory(rootdir);
-  TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 40, 0, 100);
+  TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 30, -10, 20);
   htopnessMod_fastsim->SetDirectory(rootdir);
   TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 40, 0, 100);
   hngoodleps_fastsim->SetDirectory(rootdir);
