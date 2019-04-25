@@ -57,9 +57,9 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMCT->SetDirectory(rootdir);
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 30, -10, 20);
   htopnessMod->SetDirectory(rootdir);
-  TH1F *ngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
+  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
   hngoodleps->SetDirectory(rootdir);
-  TH1F *ngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 40, 0, 100);
+  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 40, 0, 100);
   hngoodbtags->SetDirectory(rootdir);
   TH1F *hgenht = new TH1F("hgenht", "genht", 40, 0, 100);
   hgenht->SetDirectory(rootdir);
@@ -147,44 +147,44 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	//if "fastsim" is in the file title, fill only the fastsim histos
     
 	//Fill Histograms
-	hpfmet_fastsim->Fill(pfmet());
-	//hmht_fastsim->Fill(mht());
-	//hv2met_fastsim->Fill(v2met();
-	hmt_met_lep_fastsim->Fill(mt_met_lep());
-	//hlepkinpt_fastsim->Fill(lepkinpt());
-	//hlepkineta_fastsim->Fill(lepkineta());
-	hngoodjets_fastsim->Fill(ngoodjets());
-	//hpt_fastsim->Fill(pt());
-	//heta_fastsim->Fill(eta());
-	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET());
-	hmindphi_met_j1_j2_fastsim->Fill(mindphi_met_j1_j2());
-	//hMT2_fastsim->Fill(MT2());
-	//hMCT_fastsim->Fill(MCT());
-	htopnessMod_fastsim->Fill(topnessMod());
-	hngoodleps_fastsim->Fill(ngoodleps());
-	hngoodbtags_fastsim->Fill(ngoodbtags());
-	hgenht_fastsim->Fill(genht());
+	hpfmet_fastsim->Fill(pfmet(),scale1fb()*weight_btagsf());
+	//hmht_fastsim->Fill(mht(),scale1fb()*weight_btagsf());
+	//hv2met_fastsim->Fill(v2met(),scale1fb()*weight_btagsf());
+	hmt_met_lep_fastsim->Fill(mt_met_lep(),scale1fb()*weight_btagsf());
+	//hlepkinpt_fastsim->Fill(lepkinpt(),scale1fb()*weight_btagsf());
+	//hlepkineta_fastsim->Fill(lepkineta(),scale1fb()*weight_btagsf());
+	hngoodjets_fastsim->Fill(ngoodjets(),scale1fb()*weight_btagsf());
+	//hpt_fastsim->Fill(pt(),scale1fb()*weight_btagsf());
+	//heta_fastsim->Fill(eta(),scale1fb()*weight_btagsf());
+	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET(),scale1fb()*weight_btagsf());
+	hmindphi_met_j1_j2_fastsim->Fill(mindphi_met_j1_j2(),scale1fb()*weight_btagsf());
+	//hMT2_fastsim->Fill(MT2(),scale1fb()*weight_btagsf());
+	//hMCT_fastsim->Fill(MCT(),scale1fb()*weight_btagsf());
+	htopnessMod_fastsim->Fill(topnessMod(),scale1fb()*weight_btagsf());
+	hngoodleps_fastsim->Fill(ngoodleps(),scale1fb()*weight_btagsf());
+	hngoodbtags_fastsim->Fill(ngoodbtags(),scale1fb()*weight_btagsf());
+	hgenht_fastsim->Fill(genht(),scale1fb()*weight_btagsf());
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
 
 	//Fill Histograms
-	hpfmet->Fill(pfmet());
-	//hmht->Fill(mht());
-	//hv2met->Fill(v2met();
-	hmt_met_lep->Fill(mt_met_lep());
-	//hlepkinpt->Fill(lepkinpt());
-	//hlepkineta->Fill(lepkineta());
-	hngoodjets->Fill(ngoodjets());
-	//hpt->Fill(pt());
-	//heta->Fill(eta());
-	hlep1_dphiMET->Fill(lep1_dphiMET());
-	hmindphi_met_j1_j2->Fill(mindphi_met_j1_j2());
-	//hMT2->Fill(MT2());
-	//hMCT->Fill(MCT());
-	htopnessMod->Fill(topnessMod());
-	hngoodleps->Fill(ngoodleps());
-	hngoodbtags->Fill(ngoodbtags());
-	hgenht->Fill(genht());
+	hpfmet->Fill(pfmet(),scale1fb()*weight_btagsf());
+	//hmht->Fill(mht(),scale1fb()*weight_btagsf());
+	//hv2met->Fill(v2met(),scale1fb()*weight_btagsf());
+	hmt_met_lep->Fill(mt_met_lep(),scale1fb()*weight_btagsf());
+	//hlepkinpt->Fill(lepkinpt(),scale1fb()*weight_btagsf());
+	//hlepkineta->Fill(lepkineta(),scale1fb()*weight_btagsf());
+	hngoodjets->Fill(ngoodjets(),scale1fb()*weight_btagsf());
+	//hpt->Fill(pt(),scale1fb()*weight_btagsf());
+	//heta->Fill(eta(),scale1fb()*weight_btagsf());
+	hlep1_dphiMET->Fill(lep1_dphiMET(),scale1fb()*weight_btagsf());
+	hmindphi_met_j1_j2->Fill(mindphi_met_j1_j2(),scale1fb()*weight_btagsf());
+	//hMT2->Fill(MT2(),scale1fb()*weight_btagsf());
+	//hMCT->Fill(MCT(),scale1fb()*weight_btagsf());
+	htopnessMod->Fill(topnessMod(),scale1fb()*weight_btagsf());
+	hngoodleps->Fill(ngoodleps(),scale1fb()*weight_btagsf());
+	hngoodbtags->Fill(ngoodbtags(),scale1fb()*weight_btagsf());
+	hgenht->Fill(genht(),scale1fb()*weight_btagsf());
 
       }
     }
