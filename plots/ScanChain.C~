@@ -14,6 +14,9 @@
 #include "TTreeCache.h"
 #include "TCanvas.h"
 #include "TLegend.h"
+#include "TH2.h"
+#include "TLatex.h"
+//#include "TRatioPlot.h"
 
 // StopCMS3
 #include "StopCMS3.cc"
@@ -32,8 +35,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
   TH1F *hpfmet = new TH1F("hpfmet", "pfmet", 40,0,800);
   hpfmet->SetDirectory(rootdir);
-  //TH1F *hmht = new TH1F("hmht", "mht", 40, 0, 800);
-  //hmht->SetDirectory(rootdir);
+  TH1F *hmht = new TH1F("hmht", "mht", 40, 0, 800);
+  hmht->SetDirectory(rootdir);
   //TH1F *hv2met = new TH1F("hv2met", "v2met", 40, 0, 800);
   //hv2met->SetDirectory(rootdir);
   TH1F *hmt_met_lep = new TH1F("hmt_met_lep", "mt_met_lep", 40, 0, 800);
@@ -41,7 +44,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt = new TH1F("hlepkinpt", "lepkinpt", 40, 0, 800);
   //hlepkinpt->SetDirectory(rootdir);
   //TH1F *hlepkineta = new TH1F("hlepkineta", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 10, 0, 10);
+  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 20, 0, 20);
   hngoodjets->SetDirectory(rootdir);
   //TH1F *hpt = new TH1F("hpt", "pt", 40, 0, 800);
   //hpt->SetDirectory(rootdir);
@@ -49,26 +52,30 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //heta->SetDirectory(rootdir);
   TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 5, 0, 5);
   hlep1_dphiMET->SetDirectory(rootdir);
-  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 40, 0, 800);
+  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 5, 0, 5);
   hmindphi_met_j1_j2->SetDirectory(rootdir);
-  //TH1F *hMT2 = new TH1F("hMT2", "MT2", 40, 0, 800);
-  //hMT2->SetDirectory(rootdir);
+  TH1F *hMT2 = new TH1F("hMT2", "MT2", 40, 0, 800);
+  hMT2->SetDirectory(rootdir);
   //TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
   //hMCT->SetDirectory(rootdir);
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 30, -10, 20);
   htopnessMod->SetDirectory(rootdir);
-  TH1F *ngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
+  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 10, 0, 10);
   hngoodleps->SetDirectory(rootdir);
-  TH1F *ngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 40, 0, 100);
+  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 10, 0, 10);
   hngoodbtags->SetDirectory(rootdir);
-  TH1F *hgenht = new TH1F("hgenht", "genht", 40, 0, 100);
-  hgenht->SetDirectory(rootdir);
+  //TH1F *hgenht = new TH1F("hgenht", "genht", 100, 0, 800);
+  //hgenht->SetDirectory(rootdir);
+  //TH1F *hmassStop = new TH1F("hmassStop", "mass_stop",100, 0, 1800);
+  //hmassStop->SetDirectory(rootdir);
+  TH1F *hleadJetPt = new TH1F("hleadJetPt", "leadJetPt", 40, 0, 800);
+  hleadJetPt->SetDirectory(rootdir);
 
   //Defining fastsim histos
   TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,800);
   hpfmet_fastsim->SetDirectory(rootdir);
-  //TH1F *hmht_fastsim = new TH1F("hmht_fastsim", "mht", 40, 0, 800);
-  //hmht_fastsim->SetDirectory(rootdir);
+  TH1F *hmht_fastsim = new TH1F("hmht_fastsim", "mht", 40, 0, 800);
+  hmht_fastsim->SetDirectory(rootdir);
   //TH1F *hv2met_fastsim = new TH1F("hv2met_fastsim", "v2met", 40, 0, 800);
   //hv2met_fastsim->SetDirectory(rootdir);
   TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 40, 0, 800);
@@ -76,34 +83,46 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
   //hlepkinpt_fastsim->SetDirectory(rootdir);
   //TH1F *hlepkineta_fastsim = new TH1F("hlepkineta_fastsim", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 10, 0, 10);
+  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 20, 0, 20);
   hngoodjets_fastsim->SetDirectory(rootdir);
   //TH1F *hpt_fastsim = new TH1F("hpt_fastsim", "pt", 40, 0, 800);
   //hpt_fastsim->SetDirectory(rootdir);
   //TH1F *heta_fastsim - new TH1F("heta_fastsim", "eta", 40, 0, 800);
   //heta_fastsim->SetDirectory(rootdir);
-  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 40, 0, 100);
+  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 5, 0, 5);
   hlep1_dphiMET_fastsim->SetDirectory(rootdir);
   TH1F *hmindphi_met_j1_j2_fastsim = new TH1F("hmindphi_met_j1_j2_fastsim", "hmindphi_met_j1_j2", 40, 0, 800);
   hmindphi_met_j1_j2_fastsim->SetDirectory(rootdir);
-  //TH1F *hMT2_fastsim = new TH1F("hMT2_fastsim", "MT2", 40, 0, 800);
-  //hMT2_fastsim->SetDirectory(rootdir);
+  TH1F *hMT2_fastsim = new TH1F("hMT2_fastsim", "MT2", 40, 0, 800);
+  hMT2_fastsim->SetDirectory(rootdir);
   //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
   //hMCT_fastsim->SetDirectory(rootdir);
   TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 30, -10, 20);
   htopnessMod_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 40, 0, 100);
+  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 10, 0, 10);
   hngoodleps_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 40, 0, 100);
+  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 10, 0, 10);
   hngoodbtags_fastsim->SetDirectory(rootdir);
-  TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 40, 0, 100);
-  htopnessMod_fastsim->SetDirectory(rootdir);
- 
-
-
+  //TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 100, 0, 800);
+  //hgenht_fastsim->SetDirectory(rootdir);
+  TH1F *hmassStop_fastsim = new TH1F("hmassStop_fastsim", "mass_stop", 100, 0, 1800);
+  hmassStop_fastsim->SetDirectory(rootdir); 
+  TH1F *hleadJetPt_fastsim = new TH1F("hleadJetPt_fastsim", "leadJetPt", 40, 0, 800);
+  hleadJetPt_fastsim->SetDirectory(rootdir);
 
   //Canvas definition
-  TCanvas *c0 = new TCanvas("c0","c0",800,800);
+  TCanvas *cpfmet = new TCanvas("cpfmet","cpfmet",800,800);
+  TCanvas *cmt_met_lep = new TCanvas("cmt_met_lep","cmt_met_lep",800,800);
+  TCanvas *cngoodjets = new TCanvas("cngoodjets","cngoodjets",800,800);
+  TCanvas *clep1_dphiMET = new TCanvas("clep1_dphiMET","clep1_dphiMET",800,800);
+  TCanvas *cmindphi_met_j1_j2 = new TCanvas("cmindphi_met_j1_j2","cmindphi_met_j1_j2",800,800);
+  TCanvas *ctopnessMod = new TCanvas("ctopnessMod","ctopnessMod",800,800);
+  TCanvas *cngoodleps = new TCanvas("cngoodleps","cngoodleps",800,800);
+  TCanvas *cngoodbtags = new TCanvas("cngoodbtags","cngoodbtags",800,800);
+  TCanvas *cmht = new TCanvas("cmht","cmht",800,800);
+  TCanvas *cMT2 = new TCanvas("cMT2","cMT2",800,800);
+  TCanvas *cleadJetPt = new TCanvas("cleadJetPt","cleadJetPt",800,800);
+  //TCanvas *cmassStop = new TCanvas("cmassStop","cmassStop",800,800);
 
   // Loop over events to Analyze
   unsigned int nEventsTotal = 0;
@@ -124,7 +143,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
     stopcms3.Init(tree);
 
     string fileName = file.GetName();
-    string fileCut = "fastsim";
+    string fileCut = "FastSim";
     
     // Loop over Events in current file
     if (nEventsTotal >= nEventsChain) continue;
@@ -137,54 +156,75 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
       stopcms3.GetEntry(event);
       ++nEventsTotal;
 
+
+      // LEPTON SKIM
+      if (ngoodleps()>0) continue;
+      if((fileName.find(fileCut)!= string::npos) &&  mass_stop() !=1200) continue;
+      if((fileName.find(fileCut)!= string::npos) &&  mass_lsp() !=800) continue;
+      //cout<<"Gluino Mass"<<mass_stop()<<" LSP mass"<<mass_lsp()<<endl;
+      
       // Progress
       StopCMS3::progress( nEventsTotal, nEventsChain );
 
       // Analysis Code
       // this is where we put cuts like pfmet>150 : if(pfmet()<150) continue;
 
+      TH2D* h_sig_counter_nEvents = nullptr;
+      
       if(fileName.find(fileCut) != string::npos){
 	//if "fastsim" is in the file title, fill only the fastsim histos
-    
+
+	h_sig_counter_nEvents = (TH2D*) file.Get("histNEvts");
+	int nEventsPoint = h_sig_counter_nEvents->GetBinContent(h_sig_counter_nEvents->FindBin(mass_stop(), mass_lsp()));
+        float evtweight_ = xsec() * 1000 / nEventsPoint;
+
+	float totalWeight = evtweight_*weight_btagsf();
+	
 	//Fill Histograms
-	hpfmet_fastsim->Fill(pfmet());
-	//hmht_fastsim->Fill(mht());
-	//hv2met_fastsim->Fill(v2met();
-	hmt_met_lep_fastsim->Fill(mt_met_lep());
-	//hlepkinpt_fastsim->Fill(lepkinpt());
-	//hlepkineta_fastsim->Fill(lepkineta());
-	hngoodjets_fastsim->Fill(ngoodjets());
-	//hpt_fastsim->Fill(pt());
-	//heta_fastsim->Fill(eta());
-	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET());
-	hmindphi_met_j1_j2_fastsim->Fill(mindphi_met_j1_j2());
-	//hMT2_fastsim->Fill(MT2());
-	//hMCT_fastsim->Fill(MCT());
-	htopnessMod_fastsim->Fill(topnessMod());
-	hngoodleps_fastsim->Fill(ngoodleps());
-	hngoodbtags_fastsim->Fill(ngoodbtags());
-	hgenht_fastsim->Fill(genht());
+	hpfmet_fastsim->Fill(pfmet(),totalWeight);
+	hmht_fastsim->Fill(ak4_MHT_pt(),totalWeight);
+	//hv2met_fastsim->Fill(v2met(),totalWeight);
+	hmt_met_lep_fastsim->Fill(mt_met_lep(),totalWeight);
+	//hlepkinpt_fastsim->Fill(lepkinpt(),totalWeight);
+	//hlepkineta_fastsim->Fill(lepkineta(),totalWeight);
+	hngoodjets_fastsim->Fill(ngoodjets(),totalWeight);
+	//hpt_fastsim->Fill(pt(),totalWeight);
+	//heta_fastsim->Fill(eta(),totalWeight);
+	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET(),totalWeight);
+	hmindphi_met_j1_j2_fastsim->Fill(mindphi_met_j1_j2(),totalWeight);
+	hMT2_fastsim->Fill(MT2_had(),totalWeight);
+	//hMCT_fastsim->Fill(MCT(),totalWeight);
+	htopnessMod_fastsim->Fill(topnessMod(),totalWeight);
+	hngoodleps_fastsim->Fill(ngoodleps(),totalWeight);
+	hngoodbtags_fastsim->Fill(ngoodbtags(),totalWeight);
+	//hgenht_fastsim->Fill(genht(),totalWeight);
+	hmassStop_fastsim->Fill(mass_stop(),totalWeight);
+	hleadJetPt_fastsim->Fill(ak4pfjets_p4().at(0).pt(),totalWeight);
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
 
+	float totalWeightFull = scale1fb()*weight_btagsf();
+
 	//Fill Histograms
-	hpfmet->Fill(pfmet());
-	//hmht->Fill(mht());
-	//hv2met->Fill(v2met();
-	hmt_met_lep->Fill(mt_met_lep());
-	//hlepkinpt->Fill(lepkinpt());
-	//hlepkineta->Fill(lepkineta());
-	hngoodjets->Fill(ngoodjets());
-	//hpt->Fill(pt());
-	//heta->Fill(eta());
-	hlep1_dphiMET->Fill(lep1_dphiMET());
-	hmindphi_met_j1_j2->Fill(mindphi_met_j1_j2());
-	//hMT2->Fill(MT2());
-	//hMCT->Fill(MCT());
-	htopnessMod->Fill(topnessMod());
-	hngoodleps->Fill(ngoodleps());
-	hngoodbtags->Fill(ngoodbtags());
-	hgenht->Fill(genht());
+	hpfmet->Fill(pfmet(),totalWeightFull);
+	hmht->Fill(ak4_MHT_pt(),totalWeightFull);
+	//hv2met->Fill(v2met(),totalWeightFull);
+	hmt_met_lep->Fill(mt_met_lep(),totalWeightFull);
+	//hlepkinpt->Fill(lepkinpt(),totalWeightFull);
+	//hlepkineta->Fill(lepkineta(),totalWeightFull);
+	hngoodjets->Fill(ngoodjets(),totalWeightFull);
+	//hpt->Fill(pt(),totalWeightFull);
+	//heta->Fill(eta(),totalWeightFull);
+	hlep1_dphiMET->Fill(lep1_dphiMET(),totalWeightFull);
+	hmindphi_met_j1_j2->Fill(mindphi_met_j1_j2(),totalWeightFull);
+	hMT2->Fill(MT2_had(),totalWeightFull);
+	//hMCT->Fill(MCT(),totalWeightFull);
+	htopnessMod->Fill(topnessMod(),totalWeightFull);
+	hngoodleps->Fill(ngoodleps(),totalWeightFull);
+	hngoodbtags->Fill(ngoodbtags(),totalWeightFull);
+	//hgenht->Fill(genht(),totalWeightFull);
+	//hmassStop->Fill(mass_stop(),totalWeightFull);
+	hleadJetPt->Fill(ak4pfjets_p4().at(0).pt(),totalWeightFull);
 
       }
     }
@@ -200,7 +240,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   // Example Histograms
   //  hpfmet->Draw();
 
-  c0->cd();
+  cpfmet->cd();
   hpfmet->SetStats(false);
   hpfmet->SetLineWidth(3);
   hpfmet->SetLineColor(kRed);
@@ -211,265 +251,129 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hpfmet_fastsim->SetLineColor(kBlue);
   hpfmet_fastsim->DrawNormalized("same");
 
+  //auto rp = new TRatioPlot(hpfmet,hpfmet_fastsim);
+  //rp->Draw();
+  //cpfmet->Update();
+
   TLegend* leg0 = new TLegend(0.1,0.7,0.48,0.9);
   leg0->AddEntry(hpfmet,"FullSim Sample");
   leg0->AddEntry(hpfmet_fastsim,"FastSim Sample");
   leg0->Draw();
 
-
-  //c0->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg0 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg0->AddEntry( ,"FullSim Sample");
-  //leg0->AddEntry( ,"FastSim Sample");
-  //leg0->Draw;
-
-
-  //c1->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg1 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg1->AddEntry( ,"FullSim Sample");
-  //leg1->AddEntry( ,"FastSim Sample");
-  //leg1->Draw;
-
-
-  //c2->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg2 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg2->AddEntry( ,"FullSim Sample");
-  //leg2->AddEntry( ,"FastSim Sample");
-  //leg2->Draw;
-
-
-  //c3->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg3 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg3->AddEntry( ,"FullSim Sample");
-  //leg3->AddEntry( ,"FastSim Sample");
-  //leg3->Draw;
-
-
-  //c4->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg4 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg4->AddEntry( ,"FullSim Sample");
-  //leg4->AddEntry( ,"FastSim Sample");
-  //leg4->Draw;
+  cmt_met_lep->cd();
+  hmt_met_lep->SetStats(false);
+  hmt_met_lep->SetLineWidth(3);
+  hmt_met_lep->SetLineColor(kRed);
+  hmt_met_lep->GetXaxis()->SetTitle("M_{T}");
+  hmt_met_lep->DrawNormalized();
+  hmt_met_lep_fastsim->SetStats(false);
+  hmt_met_lep_fastsim->SetLineWidth(3);
+  hmt_met_lep_fastsim->SetLineColor(kBlue);
+  hmt_met_lep_fastsim->DrawNormalized("same");
   
+  cngoodjets->cd();
+  hngoodjets->SetStats(false);
+  hngoodjets->SetLineWidth(3);
+  hngoodjets->SetLineColor(kRed);
+  hngoodjets->GetXaxis()->SetTitle("nJets");
+  hngoodjets->DrawNormalized();
+  hngoodjets_fastsim->SetStats(false);
+  hngoodjets_fastsim->SetLineWidth(3);
+  hngoodjets_fastsim->SetLineColor(kBlue);
+  hngoodjets_fastsim->DrawNormalized("same");
 
-  //c5->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
+  clep1_dphiMET->cd();
+  hlep1_dphiMET->SetStats(false);
+  hlep1_dphiMET->SetLineWidth(3);
+  hlep1_dphiMET->SetLineColor(kRed);
+  hlep1_dphiMET->GetXaxis()->SetTitle("dPhi_{MET}");
+  hlep1_dphiMET->DrawNormalized();
+  hlep1_dphiMET_fastsim->SetStats(false);
+  hlep1_dphiMET_fastsim->SetLineWidth(3);
+  hlep1_dphiMET_fastsim->SetLineColor(kBlue);
+  hlep1_dphiMET_fastsim->DrawNormalized("same");
 
+  cmindphi_met_j1_j2->cd();
+  hmindphi_met_j1_j2->SetStats(false);
+  hmindphi_met_j1_j2->SetLineWidth(3);
+  hmindphi_met_j1_j2->SetLineColor(kRed);
+  hmindphi_met_j1_j2->GetXaxis()->SetTitle("min dPhi_{jets}");
+  hmindphi_met_j1_j2->DrawNormalized();
+  hmindphi_met_j1_j2_fastsim->SetStats(false);
+  hmindphi_met_j1_j2_fastsim->SetLineWidth(3);
+  hmindphi_met_j1_j2_fastsim->SetLineColor(kBlue);
+  hmindphi_met_j1_j2_fastsim->DrawNormalized("same");
 
-  //TLegend* leg5 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg5->AddEntry( ,"FullSim Sample");
-  //leg5->AddEntry( ,"FastSim Sample");
-  //leg5->Draw;
+  ctopnessMod->cd();
+  htopnessMod->SetStats(false);
+  htopnessMod->SetLineWidth(3);
+  htopnessMod->SetLineColor(kRed);
+  htopnessMod->GetXaxis()->SetTitle("Moderated Topness");
+  htopnessMod->DrawNormalized();
+  htopnessMod_fastsim->SetStats(false);
+  htopnessMod_fastsim->SetLineWidth(3);
+  htopnessMod_fastsim->SetLineColor(kBlue);
+  htopnessMod_fastsim->DrawNormalized("same");
 
+  cngoodleps->cd();
+  hngoodleps->SetStats(false);
+  hngoodleps->SetLineWidth(3);
+  hngoodleps->SetLineColor(kRed);
+  hngoodleps->GetXaxis()->SetTitle("nLeptons");
+  hngoodleps->DrawNormalized();
+  hngoodleps_fastsim->SetStats(false);
+  hngoodleps_fastsim->SetLineWidth(3);
+  hngoodleps_fastsim->SetLineColor(kBlue);
+  hngoodleps_fastsim->DrawNormalized("same");
 
-  //c6->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
+  cngoodbtags->cd();
+  hngoodbtags->SetStats(false);
+  hngoodbtags->SetLineWidth(3);
+  hngoodbtags->SetLineColor(kRed);
+  hngoodbtags->GetXaxis()->SetTitle("nb-tags");
+  hngoodbtags->DrawNormalized();
+  hngoodbtags_fastsim->SetStats(false);
+  hngoodbtags_fastsim->SetLineWidth(3);
+  hngoodbtags_fastsim->SetLineColor(kBlue);
+  hngoodbtags_fastsim->DrawNormalized("same");
 
+  cmht->cd();
+  hmht->SetStats(false);
+  hmht->SetLineWidth(3);
+  hmht->SetLineColor(kRed);
+  hmht->GetXaxis()->SetTitle("Missing h_{T}");
+  hmht->DrawNormalized();
+  hmht_fastsim->SetStats(false);
+  hmht_fastsim->SetLineWidth(3);
+  hmht_fastsim->SetLineColor(kBlue);
+  hmht_fastsim->DrawNormalized("same");
 
-  //TLegend* leg6 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg6->AddEntry( ,"FullSim Sample");
-  //leg6->AddEntry( ,"FastSim Sample");
-  //leg6->Draw;
+  cMT2->cd();
+  hMT2->SetStats(false);
+  hMT2->SetLineWidth(3);
+  hMT2->SetLineColor(kRed);
+  hMT2->GetXaxis()->SetTitle("MT2");
+  hMT2->DrawNormalized();
+  hMT2_fastsim->SetStats(false);
+  hMT2_fastsim->SetLineWidth(3);
+  hMT2_fastsim->SetLineColor(kBlue);
+  hMT2_fastsim->DrawNormalized("same");
 
-
-  //c7->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg7 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg7->AddEntry( ,"FullSim Sample");
-  //leg7->AddEntry( ,"FastSim Sample");
-  //leg7->Draw;
-
-  //c8->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg8 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg8->AddEntry( ,"FullSim Sample");
-  //leg8->AddEntry( ,"FastSim Sample");
-  //leg8->Draw;
-
-
-  //c9->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg9 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg9->AddEntry( ,"FullSim Sample");
-  //leg9->AddEntry( ,"FastSim Sample");
-  //leg9->Draw;
-
-
-  //c10->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg10 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg10->AddEntry( ,"FullSim Sample");
-  //leg10->AddEntry( ,"FastSim Sample");
-  //leg10->Draw;
-
-
-  //c11->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg11 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg11->AddEntry( ,"FullSim Sample");
-  //leg11->AddEntry( ,"FastSim Sample");
-  //leg11->Draw;
-
-  //c12->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg12 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg12->AddEntry( ,"FullSim Sample");
-  //leg12->AddEntry( ,"FastSim Sample");
-  //leg12->Draw;
-
-  //c13->cd();
-  //h_ ->SetStats(false);
-  //h_->SetLineWidth(3);
-  //h_ ->SetLineColor(kRed);
-  //h_ ->GetXaxis()->SetTitle(" ");
-  //h_DrawNormalized();
-  //h_fastsim->SetStats(false);
-  //h_fastsim->SetLineWidth(3);
-  //h_fastsim->SetLineColor(kBlue);
-  //h_fastsim->DrawNormalized("same");
-
-
-  //TLegend* leg13 = newTLegend(0.1,0.7.0.48,0.9);
-  //leg13->AddEntry( ,"FullSim Sample");
-  //leg13->AddEntry( ,"FastSim Sample");
-  //leg13->Draw;
-
-
+  cleadJetPt->cd();
+  hleadJetPt->SetStats(false);
+  hleadJetPt->SetLineWidth(3);
+  hleadJetPt->SetLineColor(kRed);
+  hleadJetPt->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hleadJetPt->DrawNormalized();
+  hleadJetPt_fastsim->SetStats(false);
+  hleadJetPt_fastsim->SetLineWidth(3);
+  hleadJetPt_fastsim->SetLineColor(kBlue);
+  hleadJetPt_fastsim->DrawNormalized("same");
+  
   //Output file for Histograms
   TFile *fNumbers = new TFile("MirandasPlots.root","recreate");
   fNumbers->Add(hpfmet);
-  //fNumbers->Add(hmht);
+  fNumbers->Add(hmht);
   //fNumbers->Add(hv2met);
   fNumbers->Add(hmt_met_lep);
   //fNumbers->Add(hlepkinpt);
@@ -484,10 +388,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(htopnessMod);
   fNumbers->Add(hngoodleps);
   fNumbers->Add(hngoodbtags);
-  fNumbers->Add(hgenht);
+  //fNumbers->Add(hgenht);
+  //fNumbers->Add(hmassStop);
+  fNumbers->Add(hMT2);
+  fNumbers->Add(hleadJetPt);
 
   fNumbers->Add(hpfmet_fastsim);
-  //fNumbers->Add(hmht_fastsim);
+  fNumbers->Add(hmht_fastsim);
   //fNumbers->Add(hv2met_fastsim);
   fNumbers->Add(hmt_met_lep_fastsim);
   //fNumbers->Add(hlepkinpt_fastsim);
@@ -502,22 +409,23 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(htopnessMod_fastsim);
   fNumbers->Add(hngoodleps_fastsim);
   fNumbers->Add(hngoodbtags_fastsim);
-  fNumbers->Add(hgenht_fastsim);
-
-  fNumbers->Add(c0);
-  //fNumbers->Add(c1);
-  //fNumbers->Add(c2);
-  //fNumbers->Add(c3);
-  //fNumbers->Add(c4);
-  //fNumbers->Add(c5);
-  //fNumbers->Add(c6);
-  //fNumbers->Add(c7);
-  //fNumbers->Add(c8);
-  //fNumbers->Add(c9);
-  //fNumbers->Add(c10);
-  //fNumbers->Add(c11);
-  //fNumbers->Add(c12);
-  //fNumbers->Add(c13);
+  //fNumbers->Add(hgenht_fastsim);
+  fNumbers->Add(hmassStop_fastsim);
+  fNumbers->Add(hMT2_fastsim);
+  fNumbers->Add(hleadJetPt_fastsim);
+  
+  fNumbers->Add(cpfmet);
+  fNumbers->Add(cmht);
+  fNumbers->Add(cmt_met_lep);
+  fNumbers->Add(cngoodjets);
+  fNumbers->Add(clep1_dphiMET);
+  fNumbers->Add(cmindphi_met_j1_j2);
+  fNumbers->Add(ctopnessMod);
+  fNumbers->Add(cngoodleps);
+  fNumbers->Add(cngoodbtags);
+  fNumbers->Add(cMT2);
+  fNumbers->Add(cleadJetPt);
+  //fNumbers->Add(cmassStop);
   fNumbers->Write();  
   fNumbers->Close();
 

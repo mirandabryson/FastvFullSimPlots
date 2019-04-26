@@ -185,6 +185,24 @@
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TLegend.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TPave.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TBox.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TH2.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TH1.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TAxis.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TAttAxis.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayC.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayS.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayF.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/Foption.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TVectorFfwd.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TVectorDfwd.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TFitResultPtr.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/memory
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/bits/stl_raw_storage_iter.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/backward/auto_ptr.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TMatrixFBasefwd.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TMatrixDBasefwd.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TLatex.h
+./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TText.h
 ./ScanChain_C.so: StopCMS3.cc StopCMS3.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/Math/LorentzVector.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/Math/GenVector/LorentzVector.h
@@ -212,19 +230,6 @@
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TMath.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TError.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TH1F.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TH1.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TAxis.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TAttAxis.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayC.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayS.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TArrayF.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/Foption.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TVectorFfwd.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TVectorDfwd.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TFitResultPtr.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/memory
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/bits/stl_raw_storage_iter.h
-./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/gcc/5.3.0/include/c++/5.3.0/backward/auto_ptr.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TBits.h
 ./ScanChain_C.so: /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/RVersion.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/RConfig.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TClass.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TDictAttributeMap.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TInterpreter.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TROOT.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TBuffer.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TMemberInspector.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TError.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/RtypesImp.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TIsAProxy.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TFileMergeInfo.h /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed4/include/TCollectionProxyInfo.h
 ScanChain_C__ROOTBUILDVERSION= 6.06/01
