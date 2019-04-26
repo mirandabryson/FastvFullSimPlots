@@ -41,7 +41,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt = new TH1F("hlepkinpt", "lepkinpt", 40, 0, 800);
   //hlepkinpt->SetDirectory(rootdir);
   //TH1F *hlepkineta = new TH1F("hlepkineta", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 10, 0, 10);
+  TH1F *hngoodjets = new TH1F("hngoodjets", "ngoodjets", 20, 0, 20);
   hngoodjets->SetDirectory(rootdir);
   //TH1F *hpt = new TH1F("hpt", "pt", 40, 0, 800);
   //hpt->SetDirectory(rootdir);
@@ -49,7 +49,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //heta->SetDirectory(rootdir);
   TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 5, 0, 5);
   hlep1_dphiMET->SetDirectory(rootdir);
-  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 40, 0, 800);
+  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 5, 0, 5);
   hmindphi_met_j1_j2->SetDirectory(rootdir);
   //TH1F *hMT2 = new TH1F("hMT2", "MT2", 40, 0, 800);
   //hMT2->SetDirectory(rootdir);
@@ -57,12 +57,12 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMCT->SetDirectory(rootdir);
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 30, -10, 20);
   htopnessMod->SetDirectory(rootdir);
-  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 40, 0, 100);
+  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 10, 0, 10);
   hngoodleps->SetDirectory(rootdir);
-  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 40, 0, 100);
+  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 10, 0, 10);
   hngoodbtags->SetDirectory(rootdir);
-  TH1F *hgenht = new TH1F("hgenht", "genht", 40, 0, 100);
-  hgenht->SetDirectory(rootdir);
+  //TH1F *hgenht = new TH1F("hgenht", "genht", 100, 0, 800);
+  //hgenht->SetDirectory(rootdir);
 
   //Defining fastsim histos
   TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,800);
@@ -76,13 +76,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
   //hlepkinpt_fastsim->SetDirectory(rootdir);
   //TH1F *hlepkineta_fastsim = new TH1F("hlepkineta_fastsim", "lepkineta", 40, 0, 800);
-  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 10, 0, 10);
+  TH1F *hngoodjets_fastsim = new TH1F("hngoodjets_fastsim", "ngoodjets", 20, 0, 20);
   hngoodjets_fastsim->SetDirectory(rootdir);
   //TH1F *hpt_fastsim = new TH1F("hpt_fastsim", "pt", 40, 0, 800);
   //hpt_fastsim->SetDirectory(rootdir);
   //TH1F *heta_fastsim - new TH1F("heta_fastsim", "eta", 40, 0, 800);
   //heta_fastsim->SetDirectory(rootdir);
-  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 40, 0, 100);
+  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 5, 0, 5);
   hlep1_dphiMET_fastsim->SetDirectory(rootdir);
   TH1F *hmindphi_met_j1_j2_fastsim = new TH1F("hmindphi_met_j1_j2_fastsim", "hmindphi_met_j1_j2", 40, 0, 800);
   hmindphi_met_j1_j2_fastsim->SetDirectory(rootdir);
@@ -92,12 +92,12 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hMCT_fastsim->SetDirectory(rootdir);
   TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 30, -10, 20);
   htopnessMod_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 40, 0, 100);
+  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 10, 0, 10);
   hngoodleps_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 40, 0, 100);
+  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 10, 0, 10);
   hngoodbtags_fastsim->SetDirectory(rootdir);
-  TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 40, 0, 100);
-  htopnessMod_fastsim->SetDirectory(rootdir);
+  //TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 100, 0, 800);
+  //hgenht_fastsim->SetDirectory(rootdir);
  
 
 
@@ -137,6 +137,10 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
       stopcms3.GetEntry(event);
       ++nEventsTotal;
 
+
+      // LEPTON SKIM
+      if (ngoodleps()>0) continue;
+
       // Progress
       StopCMS3::progress( nEventsTotal, nEventsChain );
 
@@ -163,7 +167,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	htopnessMod_fastsim->Fill(topnessMod(),scale1fb()*weight_btagsf());
 	hngoodleps_fastsim->Fill(ngoodleps(),scale1fb()*weight_btagsf());
 	hngoodbtags_fastsim->Fill(ngoodbtags(),scale1fb()*weight_btagsf());
-	hgenht_fastsim->Fill(genht(),scale1fb()*weight_btagsf());
+	//hgenht_fastsim->Fill(genht(),scale1fb()*weight_btagsf());
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
 
@@ -184,7 +188,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	htopnessMod->Fill(topnessMod(),scale1fb()*weight_btagsf());
 	hngoodleps->Fill(ngoodleps(),scale1fb()*weight_btagsf());
 	hngoodbtags->Fill(ngoodbtags(),scale1fb()*weight_btagsf());
-	hgenht->Fill(genht(),scale1fb()*weight_btagsf());
+	//hgenht->Fill(genht(),scale1fb()*weight_btagsf());
 
       }
     }
@@ -484,7 +488,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(htopnessMod);
   fNumbers->Add(hngoodleps);
   fNumbers->Add(hngoodbtags);
-  fNumbers->Add(hgenht);
+  //fNumbers->Add(hgenht);
 
   fNumbers->Add(hpfmet_fastsim);
   //fNumbers->Add(hmht_fastsim);
@@ -502,7 +506,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(htopnessMod_fastsim);
   fNumbers->Add(hngoodleps_fastsim);
   fNumbers->Add(hngoodbtags_fastsim);
-  fNumbers->Add(hgenht_fastsim);
+  //fNumbers->Add(hgenht_fastsim);
 
   fNumbers->Add(c0);
   //fNumbers->Add(c1);
