@@ -4,7 +4,7 @@
 
   TChain *ch = new TChain("t"); 
   ch->Add("/home/users/isuarez/MCStudies/T14t_mGluino1200_mLSP800_FullSim_0.root");
-  ch->Add("/home/users/isuarez/MCStudies/T14t_mGluino1200_mLSP800_FastSim_merged.root ");
+  ch->Add("/home/users/isuarez/MCStudies/SMS_T14t_Fall17_fastsim_1.root");
   //ch->Add("/home/users/isuarez/MCStudies/T14t_mGluino1200_mLSP800_FastSim.root");
   //ch->Add("stopbaby_3.root");
   //ch->Add("fastsim_stopbaby_119.root");
