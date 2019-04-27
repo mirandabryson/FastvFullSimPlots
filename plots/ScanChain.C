@@ -137,7 +137,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   halljetpt_fastsim->SetDirectory(rootdir);
   TH1F *halljeteta_fastsim = new TH1F("halljeteta_fastsim", "alljeteta", 10, -3, -3);
   halljeteta_fastsim->SetDirectory(rootdir);
-  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 10, -3, 3);
+  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 20, -3, 3);
   hleadJetEta_fastsim->SetDirectory(rootdir);
 
 
