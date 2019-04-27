@@ -39,7 +39,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hmht->SetDirectory(rootdir);
   //TH1F *hv2met = new TH1F("hv2met", "v2met", 40, 0, 800);
   //hv2met->SetDirectory(rootdir);
-  TH1F *hmt_met_lep = new TH1F("hmt_met_lep", "mt_met_lep", 40, 0, 800);
+  TH1F *hmt_met_lep = new TH1F("hmt_met_lep", "mt_met_lep", 30, 0, 400);
   hmt_met_lep->SetDirectory(rootdir);
   //TH1F *hlepkinpt = new TH1F("hlepkinpt", "lepkinpt", 40, 0, 800);
   //hlepkinpt->SetDirectory(rootdir);
@@ -58,7 +58,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hMT2->SetDirectory(rootdir);
   //TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
   //hMCT->SetDirectory(rootdir);
-  TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 30, -10, 20);
+  TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 23, -10, 13);
   htopnessMod->SetDirectory(rootdir);
   TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 10, 0, 10);
   hngoodleps->SetDirectory(rootdir);
@@ -68,7 +68,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hgenht->SetDirectory(rootdir);
   //TH1F *hmassStop = new TH1F("hmassStop", "mass_stop",100, 0, 1800);
   //hmassStop->SetDirectory(rootdir);
-  TH1F *hleadJetPt = new TH1F("hleadJetPt", "leadJetPt", 40, 0, 800);
+  TH1F *hleadJetPt = new TH1F("hleadJetPt", "leadJetPt", 15, 0, 300);
   hleadJetPt->SetDirectory(rootdir);
   TH1F *hlep1pt = new TH1F("hlep1pt", "lep1pt", 40, 0, 800);
   hlep1pt->SetDirectory(rootdir);
@@ -76,13 +76,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hlep1eta->SetDirectory(rootdir);
   TH1F *hlep2pt = new TH1F("hlep2pt", "lep2pt", 40, 0, 800);
   hlep1pt->SetDirectory(rootdir);
-  TH1F *hlep2eta = new TH1F("hlep1eta", "lep2eta", 40, 0, 800);
-  hlep1eta->SetDirectory(rootdir);
-  TH1F *halljetpt = new TH1F("halljetpt", "alljetpt", 40, 0, 800);
+  TH1F *hlep2eta = new TH1F("hlep2eta", "lep2eta", 40, 0, 800);
+  hlep2eta->SetDirectory(rootdir);
+  TH1F *halljetpt = new TH1F("halljetpt", "alljetpt", 30, 0, 300);
   halljetpt->SetDirectory(rootdir);
-  TH1F *halljeteta = new TH1F("halljeteta", "alljeteta", 40, 0, 800);
+  TH1F *halljeteta = new TH1F("halljeteta", "alljeteta", 20, -3, 3);
   halljeteta->SetDirectory(rootdir);
-  TH1F *hleadJetEta = new TH1F("hleadJetEta", "leadJetEta", 40, 0 , 800);
+  TH1F *hleadJetEta = new TH1F("hleadJetEta", "leadJetEta", 20, -3, 3);
   hleadJetEta->SetDirectory(rootdir);
 
 
@@ -94,7 +94,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hmht_fastsim->SetDirectory(rootdir);
   //TH1F *hv2met_fastsim = new TH1F("hv2met_fastsim", "v2met", 40, 0, 800);
   //hv2met_fastsim->SetDirectory(rootdir);
-  TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 40, 0, 800);
+  TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 30, 0, 400);
   hmt_met_lep_fastsim->SetDirectory(rootdir);
   //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
   //hlepkinpt_fastsim->SetDirectory(rootdir);
@@ -113,7 +113,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hMT2_fastsim->SetDirectory(rootdir);
   //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
   //hMCT_fastsim->SetDirectory(rootdir);
-  TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 30, -10, 20);
+  TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 23, -10, 13);
   htopnessMod_fastsim->SetDirectory(rootdir);
   TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 10, 0, 10);
   hngoodleps_fastsim->SetDirectory(rootdir);
@@ -123,7 +123,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hgenht_fastsim->SetDirectory(rootdir);
   TH1F *hmassStop_fastsim = new TH1F("hmassStop_fastsim", "mass_stop", 100, 0, 1800);
   hmassStop_fastsim->SetDirectory(rootdir); 
-  TH1F *hleadJetPt_fastsim = new TH1F("hleadJetPt_fastsim", "leadJetPt", 40, 0, 800);
+  TH1F *hleadJetPt_fastsim = new TH1F("hleadJetPt_fastsim", "leadJetPt", 15, 0, 300);
   hleadJetPt_fastsim->SetDirectory(rootdir);
   TH1F *hlep1pt_fastsim = new TH1F("hlep1pt_fastsim", "lep1pt", 40, 0, 800);
   hlep1pt_fastsim->SetDirectory(rootdir);
@@ -131,13 +131,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hlep1eta_fastsim->SetDirectory(rootdir);
   TH1F *hlep2pt_fastsim = new TH1F("hlep2pt_fastsim", "lep2pt", 40, 0, 800);
   hlep1pt_fastsim->SetDirectory(rootdir);
-  TH1F *hlep2eta_fastsim = new TH1F("hlep1eta_fastsim", "lep2eta", 40, 0, 800);
-  hlep1eta_fastsim->SetDirectory(rootdir);
-  TH1F *halljetpt_fastsim = new TH1F("halljetpt_fastsim", "alljetpt", 40, 0, 800);
+  TH1F *hlep2eta_fastsim = new TH1F("hlep2eta_fastsim", "lep2eta", 40, 0, 800);
+  hlep2eta_fastsim->SetDirectory(rootdir);
+  TH1F *halljetpt_fastsim = new TH1F("halljetpt_fastsim", "alljetpt", 15, 0, 300);
   halljetpt_fastsim->SetDirectory(rootdir);
-  TH1F *halljeteta_fastsim = new TH1F("halljeteta_fastsim", "alljeteta", 40, 0, 800);
+  TH1F *halljeteta_fastsim = new TH1F("halljeteta_fastsim", "alljeteta", 10, -3, -3);
   halljeteta_fastsim->SetDirectory(rootdir);
-  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 40, 0 , 800);
+  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 10, -3, 3);
   hleadJetEta_fastsim->SetDirectory(rootdir);
 
 
@@ -185,7 +185,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
     stopcms3.Init(tree);
 
     string fileName = file.GetName();
-    string fileCut = "FastSim";
+    string fileCut = "fastsim";
     
     // Loop over Events in current file
     if (nEventsTotal >= nEventsChain) continue;
@@ -200,7 +200,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
 
       // LEPTON SKIM
-      if (ngoodleps()>0) continue;
+      if(ngoodleps()>0) continue;
+      if(pfmet()<50) continue;
       if((fileName.find(fileCut)!= string::npos) &&  mass_stop() !=1200) continue;
       if((fileName.find(fileCut)!= string::npos) &&  mass_lsp() !=800) continue;
       //cout<<"Gluino Mass"<<mass_stop()<<" LSP mass"<<mass_lsp()<<endl;
@@ -324,12 +325,17 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hmt_met_lep->SetStats(false);
   hmt_met_lep->SetLineWidth(3);
   hmt_met_lep->SetLineColor(kRed);
-  hmt_met_lep->GetXaxis()->SetTitle("M_{T}");
+  hmt_met_lep->GetXaxis()->SetTitle("M_{T} [GeV]");
   hmt_met_lep->DrawNormalized();
   hmt_met_lep_fastsim->SetStats(false);
   hmt_met_lep_fastsim->SetLineWidth(3);
   hmt_met_lep_fastsim->SetLineColor(kBlue);
   hmt_met_lep_fastsim->DrawNormalized("same");
+
+  TLegend* leg1 = new TLegend(0.1,0.7,0.48,0.9);
+  leg1->AddEntry(hmt_met_lep,"FullSim Sample");
+  leg1->AddEntry(hmt_met_lep_fastsim,"FastSim Sample");
+  leg1->Draw();
   
   cngoodjets->cd();
   hngoodjets->SetStats(false);
@@ -342,6 +348,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hngoodjets_fastsim->SetLineColor(kBlue);
   hngoodjets_fastsim->DrawNormalized("same");
 
+  TLegend* leg2 = new TLegend(0.1,0.7,0.48,0.9);
+  leg2->AddEntry(hngoodjets,"FullSim Sample");
+  leg2->AddEntry(hngoodjets_fastsim,"FastSim Sample");
+  leg2->Draw();
+
   clep1_dphiMET->cd();
   hlep1_dphiMET->SetStats(false);
   hlep1_dphiMET->SetLineWidth(3);
@@ -352,6 +363,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hlep1_dphiMET_fastsim->SetLineWidth(3);
   hlep1_dphiMET_fastsim->SetLineColor(kBlue);
   hlep1_dphiMET_fastsim->DrawNormalized("same");
+
+  TLegend* leg3 = new TLegend(0.1,0.7,0.48,0.9);
+  leg3->AddEntry(hlep1_dphiMET,"FullSim Sample");
+  leg3->AddEntry(hlep1_dphiMET_fastsim,"FastSim Sample");
+  leg3->Draw();
 
   cmindphi_met_j1_j2->cd();
   hmindphi_met_j1_j2->SetStats(false);
@@ -364,6 +380,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hmindphi_met_j1_j2_fastsim->SetLineColor(kBlue);
   hmindphi_met_j1_j2_fastsim->DrawNormalized("same");
 
+  TLegend* leg4 = new TLegend(0.1,0.7,0.48,0.9);
+  leg4->AddEntry(hmindphi_met_j1_j2,"FullSim Sample");
+  leg4->AddEntry(hmindphi_met_j1_j2_fastsim,"FastSim Sample");
+  leg4->Draw();
+
   ctopnessMod->cd();
   htopnessMod->SetStats(false);
   htopnessMod->SetLineWidth(3);
@@ -374,6 +395,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   htopnessMod_fastsim->SetLineWidth(3);
   htopnessMod_fastsim->SetLineColor(kBlue);
   htopnessMod_fastsim->DrawNormalized("same");
+
+  TLegend* leg5 = new TLegend(0.1,0.7,0.48,0.9);
+  leg5->AddEntry(htopnessMod,"FullSim Sample");
+  leg5->AddEntry(htopnessMod_fastsim,"FastSim Sample");
+  leg5->Draw();
 
   cngoodleps->cd();
   hngoodleps->SetStats(false);
@@ -386,6 +412,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hngoodleps_fastsim->SetLineColor(kBlue);
   hngoodleps_fastsim->DrawNormalized("same");
 
+  TLegend* leg6 = new TLegend(0.1,0.7,0.48,0.9);
+  leg6->AddEntry(hngoodleps,"FullSim Sample");
+  leg6->AddEntry(hngoodleps_fastsim,"FastSim Sample");
+  leg6->Draw();
+
   cngoodbtags->cd();
   hngoodbtags->SetStats(false);
   hngoodbtags->SetLineWidth(3);
@@ -397,117 +428,170 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   hngoodbtags_fastsim->SetLineColor(kBlue);
   hngoodbtags_fastsim->DrawNormalized("same");
 
+  TLegend* leg17 = new TLegend(0.1,0.7,0.48,0.9);
+  leg17->AddEntry(hngoodbtags,"FullSim Sample");
+  leg17->AddEntry(hngoodbtags_fastsim,"FastSim Sample");
+  leg17->Draw();
+
   cmht->cd();
   hmht->SetStats(false);
   hmht->SetLineWidth(3);
   hmht->SetLineColor(kRed);
-  hmht->GetXaxis()->SetTitle("Missing h_{T}");
+  hmht->GetXaxis()->SetTitle("Missing h_{T} [GeV]");
   hmht->DrawNormalized();
   hmht_fastsim->SetStats(false);
   hmht_fastsim->SetLineWidth(3);
   hmht_fastsim->SetLineColor(kBlue);
   hmht_fastsim->DrawNormalized("same");
 
+  TLegend* leg7 = new TLegend(0.1,0.7,0.48,0.9);
+  leg7->AddEntry(hmht,"FullSim Sample");
+  leg7->AddEntry(hmht_fastsim,"FastSim Sample");
+  leg7->Draw();
+
   cMT2->cd();
   hMT2->SetStats(false);
   hMT2->SetLineWidth(3);
   hMT2->SetLineColor(kRed);
-  hMT2->GetXaxis()->SetTitle("MT2");
+  hMT2->GetXaxis()->SetTitle("MT2 [GeV]");
   hMT2->DrawNormalized();
   hMT2_fastsim->SetStats(false);
   hMT2_fastsim->SetLineWidth(3);
   hMT2_fastsim->SetLineColor(kBlue);
   hMT2_fastsim->DrawNormalized("same");
 
+  TLegend* leg8 = new TLegend(0.1,0.7,0.48,0.9);
+  leg8->AddEntry(hMT2,"FullSim Sample");
+  leg8->AddEntry(hMT2_fastsim,"FastSim Sample");
+  leg8->Draw();
+
   cleadJetPt->cd();
   hleadJetPt->SetStats(false);
   hleadJetPt->SetLineWidth(3);
   hleadJetPt->SetLineColor(kRed);
-  hleadJetPt->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hleadJetPt->GetXaxis()->SetTitle("Leading Jet p_{T} [GeV]");
   hleadJetPt->DrawNormalized();
   hleadJetPt_fastsim->SetStats(false);
   hleadJetPt_fastsim->SetLineWidth(3);
   hleadJetPt_fastsim->SetLineColor(kBlue);
   hleadJetPt_fastsim->DrawNormalized("same");
 
+  TLegend* leg9 = new TLegend(0.1,0.7,0.48,0.9);
+  leg9->AddEntry(hleadJetPt,"FullSim Sample");
+  leg9->AddEntry(hleadJetPt_fastsim,"FastSim Sample");
+  leg9->Draw();
+
   cleadJetEta->cd();
   hleadJetEta->SetStats(false);
   hleadJetEta->SetLineWidth(3);
   hleadJetEta->SetLineColor(kRed);
-  hleadJetEta->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hleadJetEta->GetXaxis()->SetTitle("Leading Jet Eta");
   hleadJetEta->DrawNormalized();
   hleadJetEta_fastsim->SetStats(false);
   hleadJetEta_fastsim->SetLineWidth(3);
   hleadJetEta_fastsim->SetLineColor(kBlue);
   hleadJetEta_fastsim->DrawNormalized("same");
 
+  TLegend* leg10 = new TLegend(0.1,0.7,0.48,0.9);
+  leg10->AddEntry(hleadJetEta,"FullSim Sample");
+  leg10->AddEntry(hleadJetEta_fastsim,"FastSim Sample");
+  leg10->Draw();
+
   calljetpt->cd();
   halljetpt->SetStats(false);
   halljetpt->SetLineWidth(3);
   halljetpt->SetLineColor(kRed);
-  halljetpt->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  halljetpt->GetXaxis()->SetTitle("All Jet p_{T} [GeV]");
   halljetpt->DrawNormalized();
   halljetpt_fastsim->SetStats(false);
   halljetpt_fastsim->SetLineWidth(3);
   halljetpt_fastsim->SetLineColor(kBlue);
   halljetpt_fastsim->DrawNormalized("same");
 
+  TLegend* leg11 = new TLegend(0.1,0.7,0.48,0.9);
+  leg11->AddEntry(halljetpt,"FullSim Sample");
+  leg11->AddEntry(halljetpt_fastsim,"FastSim Sample");
+  leg11->Draw();
+
   calljeteta->cd();
   halljeteta->SetStats(false);
   halljeteta->SetLineWidth(3);
   halljeteta->SetLineColor(kRed);
-  halljeteta->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  halljeteta->GetXaxis()->SetTitle("All Jet Eta");
   halljeteta->DrawNormalized();
   halljeteta_fastsim->SetStats(false);
   halljeteta_fastsim->SetLineWidth(3);
   halljeteta_fastsim->SetLineColor(kBlue);
   halljeteta_fastsim->DrawNormalized("same");
 
+  TLegend* leg12 = new TLegend(0.1,0.7,0.48,0.9);
+  leg12->AddEntry(halljeteta,"FullSim Sample");
+  leg12->AddEntry(halljeteta_fastsim,"FastSim Sample");
+  leg12->Draw();
+
   clep1pt->cd();
   hlep1pt->SetStats(false);
   hlep1pt->SetLineWidth(3);
   hlep1pt->SetLineColor(kRed);
-  hlep1pt->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hlep1pt->GetXaxis()->SetTitle("Lepton 1 p_{T} [GeV]");
   hlep1pt->DrawNormalized();
   hlep1pt_fastsim->SetStats(false);
   hlep1pt_fastsim->SetLineWidth(3);
   hlep1pt_fastsim->SetLineColor(kBlue);
   hlep1pt_fastsim->DrawNormalized("same");
 
+  TLegend* leg13 = new TLegend(0.1,0.7,0.48,0.9);
+  leg13->AddEntry(hlep1pt,"FullSim Sample");
+  leg13->AddEntry(hlep1pt_fastsim,"FastSim Sample");
+  leg13->Draw();
+
   clep2pt->cd();
   hlep2pt->SetStats(false);
   hlep2pt->SetLineWidth(3);
   hlep2pt->SetLineColor(kRed);
-  hlep2pt->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hlep2pt->GetXaxis()->SetTitle("Lepton 2  p_{T} [GeV]");
   hlep2pt->DrawNormalized();
   hlep2pt_fastsim->SetStats(false);
   hlep2pt_fastsim->SetLineWidth(3);
   hlep2pt_fastsim->SetLineColor(kBlue);
   hlep2pt_fastsim->DrawNormalized("same");
 
+  TLegend* leg14 = new TLegend(0.1,0.7,0.48,0.9);
+  leg14->AddEntry(hlep2pt,"FullSim Sample");
+  leg14->AddEntry(hlep2pt_fastsim,"FastSim Sample");
+  leg14->Draw();
 
   clep2eta->cd();
   hlep2eta->SetStats(false);
   hlep2eta->SetLineWidth(3);
   hlep2eta->SetLineColor(kRed);
-  hlep2eta->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hlep2eta->GetXaxis()->SetTitle("Lepton 2 Eta");
   hlep2eta->DrawNormalized();
   hlep2eta_fastsim->SetStats(false);
   hlep2eta_fastsim->SetLineWidth(3);
   hlep2eta_fastsim->SetLineColor(kBlue);
   hlep2eta_fastsim->DrawNormalized("same");
 
+  TLegend* leg15 = new TLegend(0.1,0.7,0.48,0.9);
+  leg15->AddEntry(hlep2eta,"FullSim Sample");
+  leg15->AddEntry(hlep2eta_fastsim,"FastSim Sample");
+  leg15->Draw();
+
   clep1eta->cd();
   hlep1eta->SetStats(false);
   hlep1eta->SetLineWidth(3);
   hlep1eta->SetLineColor(kRed);
-  hlep1eta->GetXaxis()->SetTitle("Leading Jet p_{T}");
+  hlep1eta->GetXaxis()->SetTitle("Lepton 1 Eta");
   hlep1eta->DrawNormalized();
   hlep1eta_fastsim->SetStats(false);
   hlep1eta_fastsim->SetLineWidth(3);
   hlep1eta_fastsim->SetLineColor(kBlue);
   hlep1eta_fastsim->DrawNormalized("same");
 
+  TLegend* leg16 = new TLegend(0.1,0.7,0.48,0.9);
+  leg16->AddEntry(hlep1eta,"FullSim Sample");
+  leg16->AddEntry(hlep1eta_fastsim,"FastSim Sample");
+  leg16->Draw();
 
 
 
