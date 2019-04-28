@@ -16,13 +16,23 @@
 #include "TLegend.h"
 #include "TH2.h"
 #include "TLatex.h"
-//#include "TRatioPlot.h"
+#include "TRatioPlot.h"
 
 // StopCMS3
 #include "StopCMS3.cc"
 
 using namespace std;
 using namespace stoptas;
+
+inline bool sortIndexbyCSV( pair<int, float> &vec1, pair<int, float> &vec2 ) {
+    return vec1.second > vec2.second;
+}
+
+float getdphi( float phi1 , float phi2 ){                                                                                                                                      
+  float dphi = fabs( phi1 - phi2 );
+  if( dphi > TMath::Pi() ) dphi = TMath::TwoPi() - dphi;
+  return dphi;
+}
 
 int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFilePrefix = "test") {
 
@@ -33,13 +43,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   // Example Histograms
   TDirectory *rootdir = gDirectory->GetDirectory("Rint:");
 
-  TH1F *hpfmet = new TH1F("hpfmet", "pfmet", 40,0,800);
+  TH1F *hpfmet = new TH1F("hpfmet", "pfmet", 40,0,1200);
   hpfmet->SetDirectory(rootdir);
   TH1F *hmht = new TH1F("hmht", "mht", 40, 0, 800);
   hmht->SetDirectory(rootdir);
   //TH1F *hv2met = new TH1F("hv2met", "v2met", 40, 0, 800);
   //hv2met->SetDirectory(rootdir);
-  TH1F *hmt_met_lep = new TH1F("hmt_met_lep", "mt_met_lep", 30, 0, 400);
+  TH1F *hmt_met_lep = new TH1F("hmt_met_lep", "mt_met_lep", 20, 0, 400);
   hmt_met_lep->SetDirectory(rootdir);
   //TH1F *hlepkinpt = new TH1F("hlepkinpt", "lepkinpt", 40, 0, 800);
   //hlepkinpt->SetDirectory(rootdir);
@@ -50,51 +60,53 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hpt->SetDirectory(rootdir);
   //TH1F *heta - new TH1F("heta", "eta", 40, 0, 800);
   //heta->SetDirectory(rootdir);
-  TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 15, 0, 3.5);
+  TH1F *hlep1_dphiMET = new TH1F("hlep1_dphiMET", "lep1_dphiMET", 16, 0, 3.2);
   hlep1_dphiMET->SetDirectory(rootdir);
-  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 15, 0, 3.5);
+  TH1F *hmindphi_met_j1_j2 = new TH1F("hmindphi_met_j1_j2", "mindphi_met_j1_j2", 16, 0, 3.2);
   hmindphi_met_j1_j2->SetDirectory(rootdir);
   TH1F *hMT2 = new TH1F("hMT2", "MT2", 40, 0, 800);
   hMT2->SetDirectory(rootdir);
-  //TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
-  //hMCT->SetDirectory(rootdir);
+  TH1F *hMT2ll = new TH1F("hMT2ll", "MT2ll", 40, 0, 800);
+  hMT2ll->SetDirectory(rootdir);
+  TH1F *hMCT = new TH1F("hMCT", "MCT", 40, 0, 800);
+  hMCT->SetDirectory(rootdir);
   TH1F *htopnessMod = new TH1F("htopnessMod", "topnessMod", 23, -10, 13);
   htopnessMod->SetDirectory(rootdir);
-  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 10, 0, 10);
+  TH1F *hngoodleps = new TH1F("hngoodleps", "ngoodleps", 4, 0, 4);
   hngoodleps->SetDirectory(rootdir);
-  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 10, 0, 10);
+  TH1F *hngoodbtags = new TH1F("hngoodbtags", "ngoodbtags", 6, 0, 6);
   hngoodbtags->SetDirectory(rootdir);
   //TH1F *hgenht = new TH1F("hgenht", "genht", 100, 0, 800);
   //hgenht->SetDirectory(rootdir);
   //TH1F *hmassStop = new TH1F("hmassStop", "mass_stop",100, 0, 1800);
   //hmassStop->SetDirectory(rootdir);
-  TH1F *hleadJetPt = new TH1F("hleadJetPt", "leadJetPt", 15, 0, 300);
+  TH1F *hleadJetPt = new TH1F("hleadJetPt", "leadJetPt", 60, 0, 1200);
   hleadJetPt->SetDirectory(rootdir);
-  TH1F *hlep1pt = new TH1F("hlep1pt", "lep1pt", 40, 0, 800);
+  TH1F *hlep1pt = new TH1F("hlep1pt", "lep1pt", 20, 0, 200);
   hlep1pt->SetDirectory(rootdir);
-  TH1F *hlep1eta = new TH1F("hlep1eta", "lep1eta", 20, -3, 3);
+  TH1F *hlep1eta = new TH1F("hlep1eta", "lep1eta", 20, -2.4, 2.4);
   hlep1eta->SetDirectory(rootdir);
-  TH1F *hlep2pt = new TH1F("hlep2pt", "lep2pt", 40, 0, 800);
+  TH1F *hlep2pt = new TH1F("hlep2pt", "lep2pt", 20, 0, 200);
   hlep1pt->SetDirectory(rootdir);
-  TH1F *hlep2eta = new TH1F("hlep2eta", "lep2eta", 20, -3, 3);
+  TH1F *hlep2eta = new TH1F("hlep2eta", "lep2eta", 20, -2.4, 2.4);
   hlep2eta->SetDirectory(rootdir);
-  TH1F *halljetpt = new TH1F("halljetpt", "alljetpt", 30, 0, 300);
+  TH1F *halljetpt = new TH1F("halljetpt", "alljetpt", 20, 0, 400);
   halljetpt->SetDirectory(rootdir);
-  TH1F *halljeteta = new TH1F("halljeteta", "alljeteta", 20, -3, 3);
+  TH1F *halljeteta = new TH1F("halljeteta", "alljeteta", 20, -2.4, 2.4);
   halljeteta->SetDirectory(rootdir);
-  TH1F *hleadJetEta = new TH1F("hleadJetEta", "leadJetEta", 20, -3, 3);
+  TH1F *hleadJetEta = new TH1F("hleadJetEta", "leadJetEta", 20, -2.4, 2.4);
   hleadJetEta->SetDirectory(rootdir);
 
-
-
   //Defining fastsim histos
-  TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,800);
+  TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,1200);
+  hpfmet_fastsim->SetDirectory(rootdir);
+  TH1F *hpfmet_fastsim_filt = new TH1F("hpfmet_fastsim_filt", "pfmet", 40,0,1200);
   hpfmet_fastsim->SetDirectory(rootdir);
   TH1F *hmht_fastsim = new TH1F("hmht_fastsim", "mht", 40, 0, 800);
   hmht_fastsim->SetDirectory(rootdir);
   //TH1F *hv2met_fastsim = new TH1F("hv2met_fastsim", "v2met", 40, 0, 800);
   //hv2met_fastsim->SetDirectory(rootdir);
-  TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 30, 0, 400);
+  TH1F *hmt_met_lep_fastsim = new TH1F("hmt_met_lep_fastsim", "mt_met_lep", 20, 0, 400);
   hmt_met_lep_fastsim->SetDirectory(rootdir);
   //TH1F *hlepkinpt_fastsim = new TH1F("hlepkinpt_fastsim", "lepkinpt", 40, 0, 800);
   //hlepkinpt_fastsim->SetDirectory(rootdir);
@@ -105,39 +117,41 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //hpt_fastsim->SetDirectory(rootdir);
   //TH1F *heta_fastsim - new TH1F("heta_fastsim", "eta", 40, 0, 800);
   //heta_fastsim->SetDirectory(rootdir);
-  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 15, 0, 3.5);
+  TH1F *hlep1_dphiMET_fastsim = new TH1F("hlep1_dphiMET_fastsim", "lep1_dphiMET", 16, 0, 3.2);
   hlep1_dphiMET_fastsim->SetDirectory(rootdir);
-  TH1F *hmindphi_met_j1_j2_fastsim = new TH1F("hmindphi_met_j1_j2_fastsim", "hmindphi_met_j1_j2", 15, 0, 3.5);
+  TH1F *hmindphi_met_j1_j2_fastsim = new TH1F("hmindphi_met_j1_j2_fastsim", "hmindphi_met_j1_j2", 16, 0, 3.2);
   hmindphi_met_j1_j2_fastsim->SetDirectory(rootdir);
   TH1F *hMT2_fastsim = new TH1F("hMT2_fastsim", "MT2", 40, 0, 800);
   hMT2_fastsim->SetDirectory(rootdir);
-  //TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
-  //hMCT_fastsim->SetDirectory(rootdir);
+  TH1F *hMT2ll_fastsim = new TH1F("hMT2ll_fastsim", "MT2ll", 40, 0, 800);
+  hMT2ll_fastsim->SetDirectory(rootdir);
+  TH1F *hMCT_fastsim = new TH1F("hMCT_fastsim", "MCT", 40, 0, 800);
+  hMCT_fastsim->SetDirectory(rootdir);
   TH1F *htopnessMod_fastsim = new TH1F("htopnessMod_fastsim", "topnessMod", 23, -10, 13);
   htopnessMod_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 10, 0, 10);
+  TH1F *hngoodleps_fastsim = new TH1F("hngoodleps_fastsim", "ngoodleps", 4, 0, 4);
   hngoodleps_fastsim->SetDirectory(rootdir);
-  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 10, 0, 10);
+  TH1F *hngoodbtags_fastsim = new TH1F("hngoodbtags_fastsim", "ngoodbtags", 6, 0, 6);
   hngoodbtags_fastsim->SetDirectory(rootdir);
   //TH1F *hgenht_fastsim = new TH1F("hgenht_fastsim", "genht", 100, 0, 800);
   //hgenht_fastsim->SetDirectory(rootdir);
   TH1F *hmassStop_fastsim = new TH1F("hmassStop_fastsim", "mass_stop", 100, 0, 1800);
   hmassStop_fastsim->SetDirectory(rootdir); 
-  TH1F *hleadJetPt_fastsim = new TH1F("hleadJetPt_fastsim", "leadJetPt", 15, 0, 300);
+  TH1F *hleadJetPt_fastsim = new TH1F("hleadJetPt_fastsim", "leadJetPt", 60, 0, 1200);
   hleadJetPt_fastsim->SetDirectory(rootdir);
-  TH1F *hlep1pt_fastsim = new TH1F("hlep1pt_fastsim", "lep1pt", 40, 0, 800);
+  TH1F *hlep1pt_fastsim = new TH1F("hlep1pt_fastsim", "lep1pt", 20, 0, 200);
   hlep1pt_fastsim->SetDirectory(rootdir);
-  TH1F *hlep1eta_fastsim = new TH1F("hlep1eta_fastsim", "lep1eta", 40, 0, 800);
+  TH1F *hlep1eta_fastsim = new TH1F("hlep1eta_fastsim", "lep1eta", 20, -2.4, 2.4);
   hlep1eta_fastsim->SetDirectory(rootdir);
-  TH1F *hlep2pt_fastsim = new TH1F("hlep2pt_fastsim", "lep2pt", 20, -3, 3);
+  TH1F *hlep2pt_fastsim = new TH1F("hlep2pt_fastsim", "lep2pt", 20, 0, 200);
   hlep1pt_fastsim->SetDirectory(rootdir);
-  TH1F *hlep2eta_fastsim = new TH1F("hlep2eta_fastsim", "lep2eta", 20, -3, 3);
+  TH1F *hlep2eta_fastsim = new TH1F("hlep2eta_fastsim", "lep2eta", 20, -2.4, 2.4);
   hlep2eta_fastsim->SetDirectory(rootdir);
-  TH1F *halljetpt_fastsim = new TH1F("halljetpt_fastsim", "alljetpt", 30, 0, 300);
+  TH1F *halljetpt_fastsim = new TH1F("halljetpt_fastsim", "alljetpt", 20, 0, 400);
   halljetpt_fastsim->SetDirectory(rootdir);
-  TH1F *halljeteta_fastsim = new TH1F("halljeteta_fastsim", "alljeteta", 20, -3, -3);
+  TH1F *halljeteta_fastsim = new TH1F("halljeteta_fastsim", "alljeteta", 20, -2.4, 2.4);
   halljeteta_fastsim->SetDirectory(rootdir);
-  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 20, -3, 3);
+  TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 20, -2.4, 2.4);
   hleadJetEta_fastsim->SetDirectory(rootdir);
 
 
@@ -145,6 +159,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
   //Canvas definition
   TCanvas *cpfmet = new TCanvas("cpfmet","cpfmet",800,800);
+  TCanvas *cpfmet_filt = new TCanvas("cpfmet_filt","cpfme_filt",800,800);
   TCanvas *cmt_met_lep = new TCanvas("cmt_met_lep","cmt_met_lep",800,800);
   TCanvas *cngoodjets = new TCanvas("cngoodjets","cngoodjets",800,800);
   TCanvas *clep1_dphiMET = new TCanvas("clep1_dphiMET","clep1_dphiMET",800,800);
@@ -154,6 +169,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   TCanvas *cngoodbtags = new TCanvas("cngoodbtags","cngoodbtags",800,800);
   TCanvas *cmht = new TCanvas("cmht","cmht",800,800);
   TCanvas *cMT2 = new TCanvas("cMT2","cMT2",800,800);
+  TCanvas *cMT2ll = new TCanvas("cMT2ll","cMT2ll",800,800);
+  TCanvas *cMCT = new TCanvas("cMCT","cMCT",800,800);
   TCanvas *cleadJetPt = new TCanvas("cleadJetPt","cleadJetPt",800,800);
   TCanvas *clep1pt = new TCanvas("clep1pt","clep1pt",800,800);
   TCanvas *clep1eta = new TCanvas("clep1eta","clep1eta",800,800);
@@ -200,8 +217,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
 
       // LEPTON SKIM
-      if(ngoodleps()>0) continue;
-      if(pfmet()<50) continue;
+//cout<<"good leps = "<<ngoodleps()<<" vetoleps =  "<<nvetoleps()<<" jets = "<<ak4pfjets_p4().size()<<endl;
+      if(ngoodleps() >0) continue;
       if((fileName.find(fileCut)!= string::npos) &&  mass_stop() !=1200) continue;
       if((fileName.find(fileCut)!= string::npos) &&  mass_lsp() !=800) continue;
       //cout<<"Gluino Mass"<<mass_stop()<<" LSP mass"<<mass_lsp()<<endl;
@@ -213,19 +230,20 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
       // this is where we put cuts like pfmet>150 : if(pfmet()<150) continue;
 
       TH2D* h_sig_counter_nEvents = nullptr;
+      float lumi = 41.5;
       
       if(fileName.find(fileCut) != string::npos){
 	//if "fastsim" is in the file title, fill only the fastsim histos
 
 	h_sig_counter_nEvents = (TH2D*) file.Get("histNEvts");
 	int nEventsPoint = h_sig_counter_nEvents->GetBinContent(h_sig_counter_nEvents->FindBin(mass_stop(), mass_lsp()));
-        float evtweight_ = xsec() * 1000 / nEventsPoint;
-
-	float totalWeight = evtweight_*weight_btagsf();
+        float evtweight_ = 0.0985 * 1000 / nEventsPoint;
+	float totalWeight = lumi*evtweight_*weight_btagsf();
 	
 	//Fill Histograms
 	hpfmet_fastsim->Fill(pfmet(),totalWeight);
-	hmht_fastsim->Fill(ak4_MHT_pt(),totalWeight);
+        if(filt_met()) hpfmet_fastsim_filt->Fill(pfmet(),totalWeight);
+     	hmht_fastsim->Fill(ak4_MHT_pt(),totalWeight);
 	//hv2met_fastsim->Fill(v2met(),totalWeight);
 	hmt_met_lep_fastsim->Fill(mt_met_lep(),totalWeight);
 	//hlepkinpt_fastsim->Fill(lepkinpt(),totalWeight);
@@ -236,14 +254,32 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	hlep1_dphiMET_fastsim->Fill(lep1_dphiMET(),totalWeight);
 	hmindphi_met_j1_j2_fastsim->Fill(mindphi_met_j1_j2(),totalWeight);
 	hMT2_fastsim->Fill(MT2_had(),totalWeight);
-	//hMCT_fastsim->Fill(MCT(),totalWeight);
+        hMT2ll_fastsim->Fill(MT2_ll(),totalWeight);
+        //mct
+        //
+        if(ak4pfjets_p4().size()>1 && ngoodbtags()>0){
+          vector <pair<int, float>> jet_csv_pairs;
+          //Only 30 GeV jets passing ID, inside eta 2.4 should survive to babies.
+          for(uint ijet=0;ijet<ak4pfjets_deepCSVb().size();ijet++){
+            float btagvalue = ak4pfjets_deepCSVb().at(ijet) + ak4pfjets_deepCSVbb().at(ijet);
+            jet_csv_pairs.push_back(make_pair(ijet,btagvalue));
+          }
+          sort( jet_csv_pairs.begin(), jet_csv_pairs.end(), sortIndexbyCSV);
+          float ptb1,ptb2,dPhibb;
+          ptb1 = ak4pfjets_p4().at(jet_csv_pairs.at(0).first).pt();
+          ptb2 = ak4pfjets_p4().at(jet_csv_pairs.at(1).first).pt();
+          dPhibb = getdphi(ak4pfjets_p4().at(jet_csv_pairs.at(0).first).phi(),ak4pfjets_p4().at(jet_csv_pairs.at(1).first).phi());
+          float mct = sqrt(2*ptb1*ptb2*(1+cos(dPhibb)));  
+  	  hMCT_fastsim->Fill(mct,totalWeight);
+        }
+
 	htopnessMod_fastsim->Fill(topnessMod(),totalWeight);
 	hngoodleps_fastsim->Fill(ngoodleps(),totalWeight);
 	hngoodbtags_fastsim->Fill(ngoodbtags(),totalWeight);
 	//hgenht_fastsim->Fill(genht(),totalWeight);
 	hmassStop_fastsim->Fill(mass_stop(),totalWeight);
-	hleadJetPt_fastsim->Fill(ak4pfjets_p4().at(0).pt(),totalWeight);
-	hleadJetEta_fastsim->Fill(ak4pfjets_p4().at(0).eta(),totalWeight);
+	if(ak4pfjets_p4().size()>1) hleadJetPt_fastsim->Fill(ak4pfjets_p4().at(0).pt(),totalWeight);
+	if(ak4pfjets_p4().size()>1) hleadJetEta_fastsim->Fill(ak4pfjets_p4().at(0).eta(),totalWeight);
 	hlep1pt_fastsim->Fill(lep1_p4().pt(), totalWeight);
 	hlep1eta_fastsim->Fill(lep1_p4().eta(), totalWeight);
 	hlep2pt_fastsim->Fill(lep2_p4().pt(), totalWeight);
@@ -251,13 +287,13 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	for(unsigned int ijets = 0; ijets < ak4pfjets_p4().size(); ijets++){
 	  halljetpt_fastsim->Fill(ak4pfjets_p4().at(ijets).pt(), totalWeight);
 	  halljeteta_fastsim->Fill(ak4pfjets_p4().at(ijets).eta(), totalWeight);
+
 	}
 
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
 
-	float totalWeightFull = scale1fb()*weight_btagsf();
-
+	float totalWeightFull = lumi*scale1fb()*weight_btagsf();
 	//Fill Histograms
 	hpfmet->Fill(pfmet(),totalWeightFull);
 	hmht->Fill(ak4_MHT_pt(),totalWeightFull);
@@ -271,14 +307,31 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	hlep1_dphiMET->Fill(lep1_dphiMET(),totalWeightFull);
 	hmindphi_met_j1_j2->Fill(mindphi_met_j1_j2(),totalWeightFull);
 	hMT2->Fill(MT2_had(),totalWeightFull);
-	//hMCT->Fill(MCT(),totalWeightFull);
+        hMT2ll->Fill(MT2_ll(),totalWeightFull);
+        //mct
+        //
+        if(ak4pfjets_p4().size()>1 && ngoodbtags()>0){
+          vector <pair<int, float>> jet_csv_pairs;
+          //Only 30 GeV jets passing ID, inside eta 2.4 should survive to babies.
+          for(uint ijet=0;ijet<ak4pfjets_deepCSVb().size();ijet++){
+            float btagvalue = ak4pfjets_deepCSVb().at(ijet) + ak4pfjets_deepCSVbb().at(ijet);
+            jet_csv_pairs.push_back(make_pair(ijet,btagvalue));
+          }
+          sort( jet_csv_pairs.begin(), jet_csv_pairs.end(), sortIndexbyCSV);
+          float ptb1,ptb2,dPhibb;
+          ptb1 = ak4pfjets_p4().at(jet_csv_pairs.at(0).first).pt();
+          ptb2 = ak4pfjets_p4().at(jet_csv_pairs.at(1).first).pt();
+          dPhibb = getdphi(ak4pfjets_p4().at(jet_csv_pairs.at(0).first).phi(),ak4pfjets_p4().at(jet_csv_pairs.at(1).first).phi());
+          float mct = sqrt(2*ptb1*ptb2*(1+cos(dPhibb)));
+          hMCT->Fill(mct,totalWeightFull);
+        }
 	htopnessMod->Fill(topnessMod(),totalWeightFull);
 	hngoodleps->Fill(ngoodleps(),totalWeightFull);
 	hngoodbtags->Fill(ngoodbtags(),totalWeightFull);
 	//hgenht->Fill(genht(),totalWeightFull);
 	//hmassStop->Fill(mass_stop(),totalWeightFull);
-	hleadJetPt->Fill(ak4pfjets_p4().at(0).pt(),totalWeightFull);
-	hleadJetEta->Fill(ak4pfjets_p4().at(0).eta(), totalWeightFull);
+	if(ak4pfjets_p4().size()>1) hleadJetPt->Fill(ak4pfjets_p4().at(0).pt(),totalWeightFull);
+	if(ak4pfjets_p4().size()>1) hleadJetEta->Fill(ak4pfjets_p4().at(0).eta(), totalWeightFull);
 	hlep1pt->Fill(lep1_p4().pt(), totalWeightFull);
 	hlep1eta->Fill(lep1_p4().eta(), totalWeightFull);
 	hlep2pt->Fill(lep2_p4().pt(), totalWeightFull);
@@ -300,300 +353,733 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   
   // Example Histograms
   //  hpfmet->Draw();
-
+  
   cpfmet->cd();
+  cpfmet->SetLogy();
+ //overflow bin
+  hpfmet_fastsim->SetBinContent(hpfmet_fastsim->GetNbinsX(), hpfmet_fastsim->GetBinContent(hpfmet_fastsim->GetNbinsX())+hpfmet_fastsim->GetBinContent(hpfmet_fastsim->GetNbinsX()+1));
+  hpfmet->SetBinContent(hpfmet->GetNbinsX(), hpfmet->GetBinContent(hpfmet->GetNbinsX())+hpfmet->GetBinContent(hpfmet->GetNbinsX()+1));
   hpfmet->SetStats(false);
   hpfmet->SetLineWidth(3);
   hpfmet->SetLineColor(kRed);
-  hpfmet->GetXaxis()->SetTitle("MET [GeV]");
-  hpfmet->DrawNormalized();
+  hpfmet->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
   hpfmet_fastsim->SetStats(false);
   hpfmet_fastsim->SetLineWidth(3);
   hpfmet_fastsim->SetLineColor(kBlue);
-  hpfmet_fastsim->DrawNormalized("same");
+  hpfmet->Scale(1./(hpfmet->Integral()));
+  hpfmet_fastsim->Scale(1./(hpfmet_fastsim->Integral()));
+  hpfmet->Draw();
+  hpfmet_fastsim->Draw("same");
 
-  //auto rp = new TRatioPlot(hpfmet,hpfmet_fastsim);
-  //rp->Draw();
-  //cpfmet->Update();
-
-  TLegend* leg0 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp = new TRatioPlot(hpfmet_fastsim,hpfmet);
+  rp->Draw("fhidelow");
+  rp->GetLowerRefGraph()->SetMinimum(0.5);
+  rp->GetLowerRefGraph()->SetMaximum(1.5);
+//  rp->GetLowerRefYaxis()->SetLabelSize(0.1);
+  rp->GetLowerRefYaxis()->SetTitle("ratio");
+  rp->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp->GetLowerRefYaxis()->SetNdivisions(303);
+  rp->SetLowTopMargin(0.3);
+  rp->GetUpperPad()->cd();
+  TLegend* leg0 = new TLegend(0.55,0.78,0.89,0.89);
   leg0->AddEntry(hpfmet,"FullSim Sample");
   leg0->AddEntry(hpfmet_fastsim,"FastSim Sample");
+  leg0->SetBorderSize(0);
   leg0->Draw();
+  cpfmet->Update();
+
+  cpfmet_filt->cd();
+  cpfmet_filt->SetLogy();
+ //overflow bin
+  hpfmet_fastsim_filt->SetBinContent(hpfmet_fastsim_filt->GetNbinsX(), hpfmet_fastsim_filt->GetBinContent(hpfmet_fastsim_filt->GetNbinsX())+hpfmet_fastsim_filt->GetBinContent(hpfmet_fastsim_filt->GetNbinsX()+1));
+  hpfmet_fastsim->SetBinContent(hpfmet_fastsim->GetNbinsX(), hpfmet_fastsim->GetBinContent(hpfmet_fastsim->GetNbinsX())+hpfmet_fastsim->GetBinContent(hpfmet_fastsim->GetNbinsX()+1));
+  hpfmet_fastsim->SetStats(false);
+  hpfmet_fastsim->SetLineWidth(3);
+  hpfmet_fastsim->SetLineColor(kBlue);
+  hpfmet_fastsim->GetXaxis()->SetTitle("E_{T}^{miss} [GeV]");
+  hpfmet_fastsim_filt->SetStats(false);
+  hpfmet_fastsim_filt->SetLineWidth(3);
+  hpfmet_fastsim_filt->SetLineColor(kRed);
+  hpfmet_fastsim->Scale(1./(hpfmet_fastsim->Integral()));
+  hpfmet_fastsim_filt->Scale(1./(hpfmet_fastsim_filt->Integral()));
+  hpfmet_fastsim->Draw();
+  hpfmet_fastsim_filt->Draw("same");
+  cout<<"MET filt "<<(float)(hpfmet_fastsim_filt->Integral()/hpfmet_fastsim->Integral())<<endl;
+
+  auto rpx = new TRatioPlot(hpfmet_fastsim_filt,hpfmet_fastsim);
+  rpx->Draw("fhidelow");
+  rpx->GetLowerRefGraph()->SetMinimum(0.8);
+  rpx->GetLowerRefGraph()->SetMaximum(1.2);
+//  rp->GetLowerRefYaxis()->SetLabelSize(0.1);
+  rpx->GetLowerRefYaxis()->SetTitle("ratio");
+  rpx->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rpx->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rpx->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rpx->GetLowerRefYaxis()->SetNdivisions(303);
+  rpx->SetLowTopMargin(0.3);
+  rpx->GetUpperPad()->cd();
+  TLegend* leg0x = new TLegend(0.55,0.78,0.89,0.89);
+  leg0x->AddEntry(hpfmet_fastsim_filt,"FastSim w/ MET filt.");
+  leg0x->AddEntry(hpfmet_fastsim,"FastSim no MET filt.");
+  leg0x->SetBorderSize(0);
+  leg0x->Draw();
+  cpfmet_filt->Update();
 
   cmt_met_lep->cd();
+  cmt_met_lep->SetLogy();
+  hmt_met_lep_fastsim->SetBinContent(hmt_met_lep_fastsim->GetNbinsX(), hmt_met_lep_fastsim->GetBinContent(hmt_met_lep_fastsim->GetNbinsX())+hmt_met_lep_fastsim->GetBinContent(hmt_met_lep_fastsim->GetNbinsX()+1));
+  hmt_met_lep->SetBinContent(hmt_met_lep->GetNbinsX(), hmt_met_lep->GetBinContent(hmt_met_lep->GetNbinsX())+hmt_met_lep->GetBinContent(hmt_met_lep->GetNbinsX()+1));
   hmt_met_lep->SetStats(false);
   hmt_met_lep->SetLineWidth(3);
   hmt_met_lep->SetLineColor(kRed);
   hmt_met_lep->GetXaxis()->SetTitle("M_{T} [GeV]");
-  hmt_met_lep->DrawNormalized();
   hmt_met_lep_fastsim->SetStats(false);
   hmt_met_lep_fastsim->SetLineWidth(3);
   hmt_met_lep_fastsim->SetLineColor(kBlue);
-  hmt_met_lep_fastsim->DrawNormalized("same");
+  hmt_met_lep->Scale(1./(hmt_met_lep->Integral()));
+  hmt_met_lep_fastsim->Scale(1./(hmt_met_lep_fastsim->Integral()));
+  hmt_met_lep->Draw();
+  hmt_met_lep_fastsim->Draw("same");
 
-  TLegend* leg1 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp1 = new TRatioPlot(hmt_met_lep_fastsim,hmt_met_lep);
+  rp1->Draw();
+  rp1->GetLowerRefGraph()->SetMinimum(0.5);
+  rp1->GetLowerRefGraph()->SetMaximum(1.5);
+//  rp->GetLowerRefYaxis()->SetLabelSize(0.1);
+  rp1->GetLowerRefYaxis()->SetTitle("ratio");
+  rp1->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp1->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp1->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp1->GetLowerRefYaxis()->SetNdivisions(303);
+  rp1->SetLowTopMargin(0.3);
+  rp1->GetUpperPad()->cd();
+  TLegend* leg1 = new TLegend(0.55,0.78,0.89,0.89);
+  leg1->SetBorderSize(0);
   leg1->AddEntry(hmt_met_lep,"FullSim Sample");
   leg1->AddEntry(hmt_met_lep_fastsim,"FastSim Sample");
   leg1->Draw();
+  cmt_met_lep->Update();
   
   cngoodjets->cd();
+  cngoodjets->SetLogy();
+  hngoodjets_fastsim->SetBinContent(hngoodjets_fastsim->GetNbinsX(), hngoodjets_fastsim->GetBinContent(hngoodjets_fastsim->GetNbinsX())+hngoodjets_fastsim->GetBinContent(hngoodjets_fastsim->GetNbinsX()+1));
+  hngoodjets->SetBinContent(hngoodjets->GetNbinsX(), hngoodjets->GetBinContent(hngoodjets->GetNbinsX())+hngoodjets->GetBinContent(hngoodjets->GetNbinsX()+1));
   hngoodjets->SetStats(false);
   hngoodjets->SetLineWidth(3);
   hngoodjets->SetLineColor(kRed);
   hngoodjets->GetXaxis()->SetTitle("nJets");
-  hngoodjets->DrawNormalized();
   hngoodjets_fastsim->SetStats(false);
   hngoodjets_fastsim->SetLineWidth(3);
   hngoodjets_fastsim->SetLineColor(kBlue);
-  hngoodjets_fastsim->DrawNormalized("same");
+  hngoodjets->Scale(1./(hngoodjets->Integral()));
+  hngoodjets_fastsim->Scale(1./(hngoodjets_fastsim->Integral()));
+  hngoodjets->Draw();
+  hngoodjets->GetYaxis()->SetRangeUser(0.00001,5.);
+  hngoodjets_fastsim->Draw("same");
 
-  TLegend* leg2 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp2 = new TRatioPlot(hngoodjets_fastsim,hngoodjets);
+  rp2->Draw();
+  rp2->GetLowerRefGraph()->SetMinimum(0.5);
+  rp2->GetLowerRefGraph()->SetMaximum(1.5);
+//  rp->GetLowerRefYaxis()->SetLabelSize(0.1);
+  rp2->GetLowerRefYaxis()->SetTitle("ratio");
+  rp2->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp2->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp2->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp2->GetLowerRefYaxis()->SetNdivisions(303);
+  rp2->SetLowTopMargin(0.3);
+  rp2->GetUpperPad()->cd();
+  TLegend* leg2 = new TLegend(0.55,0.75,0.89,0.87);
+  leg2->SetBorderSize(0);
   leg2->AddEntry(hngoodjets,"FullSim Sample");
   leg2->AddEntry(hngoodjets_fastsim,"FastSim Sample");
   leg2->Draw();
+  cngoodjets->Update();
 
   clep1_dphiMET->cd();
+  clep1_dphiMET->SetLogy();
+  hlep1_dphiMET_fastsim->SetBinContent(hlep1_dphiMET_fastsim->GetNbinsX(), hlep1_dphiMET_fastsim->GetBinContent(hlep1_dphiMET_fastsim->GetNbinsX())+hlep1_dphiMET_fastsim->GetBinContent(hlep1_dphiMET_fastsim->GetNbinsX()+1));
+  hlep1_dphiMET->SetBinContent(hlep1_dphiMET->GetNbinsX(), hlep1_dphiMET->GetBinContent(hlep1_dphiMET->GetNbinsX())+hlep1_dphiMET->GetBinContent(hlep1_dphiMET->GetNbinsX()+1));
   hlep1_dphiMET->SetStats(false);
   hlep1_dphiMET->SetLineWidth(3);
   hlep1_dphiMET->SetLineColor(kRed);
-  hlep1_dphiMET->GetXaxis()->SetTitle("dPhi_{MET}");
-  hlep1_dphiMET->DrawNormalized();
+  hlep1_dphiMET->GetXaxis()->SetTitle("#Delta#phi_{E_{T}^{miss},lep}");
   hlep1_dphiMET_fastsim->SetStats(false);
   hlep1_dphiMET_fastsim->SetLineWidth(3);
   hlep1_dphiMET_fastsim->SetLineColor(kBlue);
-  hlep1_dphiMET_fastsim->DrawNormalized("same");
+  hlep1_dphiMET->Scale(1./(hlep1_dphiMET->Integral()));
+  hlep1_dphiMET_fastsim->Scale(1./(hlep1_dphiMET_fastsim->Integral()));
+  hlep1_dphiMET->Draw();
+  hlep1_dphiMET->GetYaxis()->SetRangeUser(0.00001,5.);
+  hlep1_dphiMET_fastsim->Draw("same");
 
-  TLegend* leg3 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp3 = new TRatioPlot(hlep1_dphiMET_fastsim,hlep1_dphiMET);
+  rp3->Draw();
+  rp3->GetLowerRefGraph()->SetMinimum(0.5);
+  rp3->GetLowerRefGraph()->SetMaximum(1.5);
+  rp3->GetLowerRefYaxis()->SetTitle("ratio");
+  rp3->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp3->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp3->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp3->GetLowerRefYaxis()->SetNdivisions(303);
+  rp3->SetLowTopMargin(0.3);
+  rp3->GetUpperPad()->cd();
+  TLegend* leg3 = new TLegend(0.55,0.75,0.89,0.87);
+  leg3->SetBorderSize(0);
   leg3->AddEntry(hlep1_dphiMET,"FullSim Sample");
   leg3->AddEntry(hlep1_dphiMET_fastsim,"FastSim Sample");
   leg3->Draw();
+  clep1_dphiMET->Update();
 
   cmindphi_met_j1_j2->cd();
+  cmindphi_met_j1_j2->SetLogy();
+  hmindphi_met_j1_j2_fastsim->SetBinContent(hmindphi_met_j1_j2_fastsim->GetNbinsX(), hmindphi_met_j1_j2_fastsim->GetBinContent(hmindphi_met_j1_j2_fastsim->GetNbinsX())+hmindphi_met_j1_j2_fastsim->GetBinContent(hmindphi_met_j1_j2_fastsim->GetNbinsX()+1));
+  hmindphi_met_j1_j2->SetBinContent(hmindphi_met_j1_j2->GetNbinsX(), hmindphi_met_j1_j2->GetBinContent(hmindphi_met_j1_j2->GetNbinsX())+hmindphi_met_j1_j2->GetBinContent(hmindphi_met_j1_j2->GetNbinsX()+1));
   hmindphi_met_j1_j2->SetStats(false);
   hmindphi_met_j1_j2->SetLineWidth(3);
   hmindphi_met_j1_j2->SetLineColor(kRed);
-  hmindphi_met_j1_j2->GetXaxis()->SetTitle("min dPhi_{jets}");
-  hmindphi_met_j1_j2->DrawNormalized();
+  hmindphi_met_j1_j2->GetXaxis()->SetTitle("min #Delta#phi_{j_{1},j_{2}}");
   hmindphi_met_j1_j2_fastsim->SetStats(false);
   hmindphi_met_j1_j2_fastsim->SetLineWidth(3);
   hmindphi_met_j1_j2_fastsim->SetLineColor(kBlue);
-  hmindphi_met_j1_j2_fastsim->DrawNormalized("same");
+  hmindphi_met_j1_j2->Scale(1./(hmindphi_met_j1_j2->Integral()));
+  hmindphi_met_j1_j2_fastsim->Scale(1./(hmindphi_met_j1_j2_fastsim->Integral()));
+  hmindphi_met_j1_j2->Draw();
+  hmindphi_met_j1_j2->GetYaxis()->SetRangeUser(0.01,0.5);
+  hmindphi_met_j1_j2_fastsim->Draw("same");
 
-  TLegend* leg4 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp4 = new TRatioPlot(hmindphi_met_j1_j2_fastsim,hmindphi_met_j1_j2);
+  rp4->Draw();
+  rp4->GetLowerRefGraph()->SetMinimum(0.5);
+  rp4->GetLowerRefGraph()->SetMaximum(1.5);
+  rp4->GetLowerRefYaxis()->SetTitle("ratio");
+  rp4->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp4->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp4->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp4->GetLowerRefYaxis()->SetNdivisions(303);
+  rp4->SetLowTopMargin(0.3);
+  rp4->GetUpperPad()->cd();
+  TLegend* leg4 = new TLegend(0.55,0.75,0.89,0.87);
+  leg4->SetBorderSize(0);
   leg4->AddEntry(hmindphi_met_j1_j2,"FullSim Sample");
   leg4->AddEntry(hmindphi_met_j1_j2_fastsim,"FastSim Sample");
   leg4->Draw();
+  cmindphi_met_j1_j2->Update();
 
   ctopnessMod->cd();
+  ctopnessMod->SetLogy();
+  htopnessMod_fastsim->SetBinContent(htopnessMod_fastsim->GetNbinsX(), htopnessMod_fastsim->GetBinContent(htopnessMod_fastsim->GetNbinsX())+htopnessMod_fastsim->GetBinContent(htopnessMod_fastsim->GetNbinsX()+1));
+  htopnessMod->SetBinContent(htopnessMod->GetNbinsX(), htopnessMod->GetBinContent(htopnessMod->GetNbinsX())+htopnessMod->GetBinContent(htopnessMod->GetNbinsX()+1));
   htopnessMod->SetStats(false);
   htopnessMod->SetLineWidth(3);
   htopnessMod->SetLineColor(kRed);
   htopnessMod->GetXaxis()->SetTitle("Modified Topness");
-  htopnessMod->DrawNormalized();
   htopnessMod_fastsim->SetStats(false);
   htopnessMod_fastsim->SetLineWidth(3);
   htopnessMod_fastsim->SetLineColor(kBlue);
-  htopnessMod_fastsim->DrawNormalized("same");
+  htopnessMod->Scale(1./(htopnessMod->Integral()));
+  htopnessMod_fastsim->Scale(1./(htopnessMod_fastsim->Integral()));
+  htopnessMod->Draw();
+  htopnessMod_fastsim->Draw("same");
 
-  TLegend* leg5 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp5 = new TRatioPlot(htopnessMod_fastsim,htopnessMod);
+  rp5->Draw();
+  rp5->GetLowerRefGraph()->SetMinimum(0.5);
+  rp5->GetLowerRefGraph()->SetMaximum(1.5);
+  rp5->GetLowerRefYaxis()->SetTitle("ratio");
+  rp5->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp5->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp5->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp5->GetLowerRefYaxis()->SetNdivisions(303);
+  rp5->SetLowTopMargin(0.3);
+  rp5->GetUpperPad()->cd();
+  TLegend* leg5 = new TLegend(0.55,0.75,0.89,0.87);
+  leg5->SetBorderSize(0);
   leg5->AddEntry(htopnessMod,"FullSim Sample");
   leg5->AddEntry(htopnessMod_fastsim,"FastSim Sample");
   leg5->Draw();
+  ctopnessMod->Update();
 
   cngoodleps->cd();
+  cngoodleps->SetLogy();
+  hngoodleps_fastsim->SetBinContent(hngoodleps_fastsim->GetNbinsX(), hngoodleps_fastsim->GetBinContent(hngoodleps_fastsim->GetNbinsX())+hngoodleps_fastsim->GetBinContent(hngoodleps_fastsim->GetNbinsX()+1));
+  hngoodleps->SetBinContent(hngoodleps->GetNbinsX(), hngoodleps->GetBinContent(hngoodleps->GetNbinsX())+hngoodleps->GetBinContent(hngoodleps->GetNbinsX()+1));
   hngoodleps->SetStats(false);
   hngoodleps->SetLineWidth(3);
   hngoodleps->SetLineColor(kRed);
   hngoodleps->GetXaxis()->SetTitle("nLeptons");
-  hngoodleps->DrawNormalized();
   hngoodleps_fastsim->SetStats(false);
   hngoodleps_fastsim->SetLineWidth(3);
   hngoodleps_fastsim->SetLineColor(kBlue);
-  hngoodleps_fastsim->DrawNormalized("same");
+  hngoodleps->Scale(1./(hngoodleps->Integral()));
+  hngoodleps_fastsim->Scale(1./(hngoodleps_fastsim->Integral()));
+  hngoodleps->Draw();
+  hngoodleps_fastsim->Draw("same");
 
-  TLegend* leg6 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp6 = new TRatioPlot(hngoodleps_fastsim,hngoodleps);
+  rp6->Draw();
+  rp6->GetLowerRefGraph()->SetMinimum(0.5);
+  rp6->GetLowerRefGraph()->SetMaximum(1.5);
+  rp6->GetLowerRefYaxis()->SetTitle("ratio");
+  rp6->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp6->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp6->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp6->GetLowerRefYaxis()->SetNdivisions(303);
+  rp6->SetLowTopMargin(0.3);
+  rp6->GetUpperPad()->cd();
+  TLegend* leg6 = new TLegend(0.55,0.75,0.89,0.87);
+  leg6->SetBorderSize(0);
   leg6->AddEntry(hngoodleps,"FullSim Sample");
   leg6->AddEntry(hngoodleps_fastsim,"FastSim Sample");
   leg6->Draw();
+  cngoodleps->Update();
 
   cngoodbtags->cd();
+  cngoodbtags->SetLogy();
+  hngoodbtags_fastsim->SetBinContent(hngoodbtags_fastsim->GetNbinsX(), hngoodbtags_fastsim->GetBinContent(hngoodbtags_fastsim->GetNbinsX())+hngoodbtags_fastsim->GetBinContent(hngoodbtags_fastsim->GetNbinsX()+1));
+  hngoodbtags->SetBinContent(hngoodbtags->GetNbinsX(), hngoodbtags->GetBinContent(hngoodbtags->GetNbinsX())+hngoodbtags->GetBinContent(hngoodbtags->GetNbinsX()+1));
   hngoodbtags->SetStats(false);
   hngoodbtags->SetLineWidth(3);
   hngoodbtags->SetLineColor(kRed);
   hngoodbtags->GetXaxis()->SetTitle("nb-tags");
-  hngoodbtags->DrawNormalized();
   hngoodbtags_fastsim->SetStats(false);
   hngoodbtags_fastsim->SetLineWidth(3);
   hngoodbtags_fastsim->SetLineColor(kBlue);
-  hngoodbtags_fastsim->DrawNormalized("same");
+  hngoodbtags->Scale(1./(hngoodbtags->Integral()));
+  hngoodbtags_fastsim->Scale(1./(hngoodbtags_fastsim->Integral()));
+  hngoodbtags->Draw();
+  hngoodbtags_fastsim->Draw("same");
 
-  TLegend* leg17 = new TLegend(0.1,0.7,0.48,0.9);
-  leg17->AddEntry(hngoodbtags,"FullSim Sample");
-  leg17->AddEntry(hngoodbtags_fastsim,"FastSim Sample");
-  leg17->Draw();
+  auto rp7 = new TRatioPlot(hngoodbtags_fastsim,hngoodbtags);
+  rp7->Draw();
+  rp7->GetLowerRefGraph()->SetMinimum(0.5);
+  rp7->GetLowerRefGraph()->SetMaximum(1.5);
+  rp7->GetLowerRefYaxis()->SetTitle("ratio");
+  rp7->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp7->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp7->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp7->GetLowerRefYaxis()->SetNdivisions(303);
+  rp7->SetLowTopMargin(0.3);
+  rp7->GetUpperPad()->cd();
+  TLegend* leg7 = new TLegend(0.55,0.75,0.89,0.87);
+  leg7->SetBorderSize(0);
+  leg7->AddEntry(hngoodbtags,"FullSim Sample");
+  leg7->AddEntry(hngoodbtags_fastsim,"FastSim Sample");
+  leg7->Draw();
+  cngoodbtags->Update();
 
   cmht->cd();
+  cmht->SetLogy();
+  hmht_fastsim->SetBinContent(hmht_fastsim->GetNbinsX(), hmht_fastsim->GetBinContent(hmht_fastsim->GetNbinsX())+hmht_fastsim->GetBinContent(hmht_fastsim->GetNbinsX()+1));
+  hmht->SetBinContent(hmht->GetNbinsX(), hmht->GetBinContent(hmht->GetNbinsX())+hmht->GetBinContent(hmht->GetNbinsX()+1));
   hmht->SetStats(false);
   hmht->SetLineWidth(3);
   hmht->SetLineColor(kRed);
-  hmht->GetXaxis()->SetTitle("Missing h_{T} [GeV]");
-  hmht->DrawNormalized();
+  hmht->GetXaxis()->SetTitle("H_{T}^{miss} [GeV]");
   hmht_fastsim->SetStats(false);
   hmht_fastsim->SetLineWidth(3);
   hmht_fastsim->SetLineColor(kBlue);
-  hmht_fastsim->DrawNormalized("same");
+  hmht->Scale(1./(hmht->Integral()));
+  hmht_fastsim->Scale(1./(hmht_fastsim->Integral()));
+  hmht->Draw();
+  hmht_fastsim->Draw("same");
 
-  TLegend* leg7 = new TLegend(0.1,0.7,0.48,0.9);
-  leg7->AddEntry(hmht,"FullSim Sample");
-  leg7->AddEntry(hmht_fastsim,"FastSim Sample");
-  leg7->Draw();
+  auto rp8 = new TRatioPlot(hmht_fastsim,hmht);
+  rp8->Draw();
+  rp8->GetLowerRefGraph()->SetMinimum(0.5);
+  rp8->GetLowerRefGraph()->SetMaximum(1.5);
+  rp8->GetLowerRefYaxis()->SetTitle("ratio");
+  rp8->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp8->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp8->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp8->GetLowerRefYaxis()->SetNdivisions(303);
+  rp8->SetLowTopMargin(0.3);
+  rp8->GetUpperPad()->cd();
+  TLegend* leg71 = new TLegend(0.55,0.75,0.89,0.87);
+  leg71->SetBorderSize(0);
+  leg71->AddEntry(hmht,"FullSim Sample");
+  leg71->AddEntry(hmht_fastsim,"FastSim Sample");
+  leg71->Draw();
+  cmht->Update();
 
   cMT2->cd();
+  cMT2->SetLogy();
+  hMT2_fastsim->SetBinContent(hMT2_fastsim->GetNbinsX(), hMT2_fastsim->GetBinContent(hMT2_fastsim->GetNbinsX())+hMT2_fastsim->GetBinContent(hMT2_fastsim->GetNbinsX()+1));
+  hMT2->SetBinContent(hMT2->GetNbinsX(), hMT2->GetBinContent(hMT2->GetNbinsX())+hMT2->GetBinContent(hMT2->GetNbinsX()+1));
   hMT2->SetStats(false);
   hMT2->SetLineWidth(3);
   hMT2->SetLineColor(kRed);
   hMT2->GetXaxis()->SetTitle("MT2 [GeV]");
-  hMT2->DrawNormalized();
   hMT2_fastsim->SetStats(false);
   hMT2_fastsim->SetLineWidth(3);
   hMT2_fastsim->SetLineColor(kBlue);
-  hMT2_fastsim->DrawNormalized("same");
+  hMT2->Scale(1./(hMT2->Integral()));
+  hMT2_fastsim->Scale(1./(hMT2_fastsim->Integral()));
+  hMT2->Draw();
+  hMT2_fastsim->Draw("same");
 
-  TLegend* leg8 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp9 = new TRatioPlot(hMT2_fastsim,hMT2);
+  rp9->Draw();
+  rp9->GetLowerRefGraph()->SetMinimum(0.5);
+  rp9->GetLowerRefGraph()->SetMaximum(1.5);
+  rp9->GetLowerRefYaxis()->SetTitle("ratio");
+  rp9->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp9->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp9->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp9->GetLowerRefYaxis()->SetNdivisions(303);
+  rp9->SetLowTopMargin(0.3);
+  rp9->GetUpperPad()->cd();
+  TLegend* leg8 = new TLegend(0.55,0.75,0.89,0.87);
+  leg8->SetBorderSize(0);
   leg8->AddEntry(hMT2,"FullSim Sample");
   leg8->AddEntry(hMT2_fastsim,"FastSim Sample");
   leg8->Draw();
+  cMT2->Update();
+
+  cMT2ll->cd();
+  cMT2ll->SetLogy();
+  hMT2ll_fastsim->SetBinContent(hMT2ll_fastsim->GetNbinsX(), hMT2ll_fastsim->GetBinContent(hMT2ll_fastsim->GetNbinsX())+hMT2ll_fastsim->GetBinContent(hMT2ll_fastsim->GetNbinsX()+1));
+  hMT2ll->SetBinContent(hMT2ll->GetNbinsX(), hMT2ll->GetBinContent(hMT2ll->GetNbinsX())+hMT2ll->GetBinContent(hMT2ll->GetNbinsX()+1));
+  hMT2ll->SetStats(false);
+  hMT2ll->SetLineWidth(3);
+  hMT2ll->SetLineColor(kRed);
+  hMT2ll->GetXaxis()->SetTitle("MT2(l,l) [GeV]");
+  hMT2ll_fastsim->SetStats(false);
+  hMT2ll_fastsim->SetLineWidth(3);
+  hMT2ll_fastsim->SetLineColor(kBlue);
+  hMT2ll->Scale(1./(hMT2ll->Integral()));
+  hMT2ll_fastsim->Scale(1./(hMT2ll_fastsim->Integral()));
+  hMT2ll->Draw();
+  hMT2ll_fastsim->Draw("same");
+
+  auto rp9x = new TRatioPlot(hMT2_fastsim,hMT2);
+  rp9x->Draw();
+  rp9x->GetLowerRefGraph()->SetMinimum(0.5);
+  rp9x->GetLowerRefGraph()->SetMaximum(1.5);
+  rp9x->GetLowerRefYaxis()->SetTitle("ratio");
+  rp9x->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp9x->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp9x->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp9x->GetLowerRefYaxis()->SetNdivisions(303);
+  rp9x->SetLowTopMargin(0.3);
+  rp9x->GetUpperPad()->cd();
+  TLegend* leg8x = new TLegend(0.55,0.75,0.89,0.87);
+  leg8x->SetBorderSize(0);
+  leg8x->AddEntry(hMT2,"FullSim Sample");
+  leg8x->AddEntry(hMT2_fastsim,"FastSim Sample");
+  leg8x->Draw();
+  cMT2ll->Update();
+
+  cMCT->cd();
+  cMCT->SetLogy();
+  hMCT_fastsim->SetBinContent(hMCT_fastsim->GetNbinsX(), hMCT_fastsim->GetBinContent(hMCT_fastsim->GetNbinsX())+hMCT_fastsim->GetBinContent(hMCT_fastsim->GetNbinsX()+1));
+  hMCT->SetBinContent(hMCT->GetNbinsX(), hMCT->GetBinContent(hMCT->GetNbinsX())+hMCT->GetBinContent(hMCT->GetNbinsX()+1));
+  hMCT->SetStats(false);
+  hMCT->SetLineWidth(3);
+  hMCT->SetLineColor(kRed);
+  hMCT->GetXaxis()->SetTitle("MCT [GeV]");
+  hMCT_fastsim->SetStats(false);
+  hMCT_fastsim->SetLineWidth(3);
+  hMCT_fastsim->SetLineColor(kBlue);
+  hMCT->Scale(1./(hMCT->Integral()));
+  hMCT_fastsim->Scale(1./(hMCT_fastsim->Integral()));
+  hMCT->Draw();
+  hMCT_fastsim->Draw("same");
+
+  auto rp9xx = new TRatioPlot(hMCT_fastsim,hMCT);
+  rp9xx->Draw();
+  rp9xx->GetLowerRefGraph()->SetMinimum(0.5);
+  rp9xx->GetLowerRefGraph()->SetMaximum(1.5);
+  rp9xx->GetLowerRefYaxis()->SetTitle("ratio");
+  rp9xx->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp9xx->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp9xx->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp9xx->GetLowerRefYaxis()->SetNdivisions(303);
+  rp9xx->SetLowTopMargin(0.3);
+  rp9xx->GetUpperPad()->cd();
+  TLegend* leg8xx = new TLegend(0.55,0.75,0.89,0.87);
+  leg8xx->SetBorderSize(0);
+  leg8xx->AddEntry(hMCT,"FullSim Sample");
+  leg8xx->AddEntry(hMCT_fastsim,"FastSim Sample");
+  leg8xx->Draw();
+  cMCT->Update();
 
   cleadJetPt->cd();
+  cleadJetPt->SetLogy();
+  hleadJetPt_fastsim->SetBinContent(hleadJetPt_fastsim->GetNbinsX(), hleadJetPt_fastsim->GetBinContent(hleadJetPt_fastsim->GetNbinsX())+hleadJetPt_fastsim->GetBinContent(hleadJetPt_fastsim->GetNbinsX()+1));
+  hleadJetPt->SetBinContent(hleadJetPt->GetNbinsX(), hleadJetPt->GetBinContent(hleadJetPt->GetNbinsX())+hleadJetPt->GetBinContent(hleadJetPt->GetNbinsX()+1));
   hleadJetPt->SetStats(false);
   hleadJetPt->SetLineWidth(3);
   hleadJetPt->SetLineColor(kRed);
   hleadJetPt->GetXaxis()->SetTitle("Leading Jet p_{T} [GeV]");
-  hleadJetPt->DrawNormalized();
   hleadJetPt_fastsim->SetStats(false);
   hleadJetPt_fastsim->SetLineWidth(3);
   hleadJetPt_fastsim->SetLineColor(kBlue);
-  hleadJetPt_fastsim->DrawNormalized("same");
+  hleadJetPt->Scale(1./(hleadJetPt->Integral()));
+  hleadJetPt_fastsim->Scale(1./(hleadJetPt_fastsim->Integral()));
+  hleadJetPt->Draw();
+  hleadJetPt->GetYaxis()->SetRangeUser(0.000001,5.);
+  hleadJetPt_fastsim->Draw("same");
 
-  TLegend* leg9 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp10 = new TRatioPlot(hleadJetPt_fastsim,hleadJetPt);
+  rp10->Draw();
+  rp10->GetLowerRefGraph()->SetMinimum(0.5);
+  rp10->GetLowerRefGraph()->SetMaximum(1.5);
+  rp10->GetLowerRefYaxis()->SetTitle("ratio");
+  rp10->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp10->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp10->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp10->GetLowerRefYaxis()->SetNdivisions(303);
+  rp10->SetLowTopMargin(0.3);
+  rp10->GetUpperPad()->cd();
+  TLegend* leg9 = new TLegend(0.55,0.78,0.89,0.89);
+  leg9->SetBorderSize(0);
   leg9->AddEntry(hleadJetPt,"FullSim Sample");
   leg9->AddEntry(hleadJetPt_fastsim,"FastSim Sample");
   leg9->Draw();
+  cleadJetPt->Update();
 
   cleadJetEta->cd();
+  cleadJetEta->SetLogy();
+  hleadJetEta_fastsim->SetBinContent(hleadJetEta_fastsim->GetNbinsX(), hleadJetEta_fastsim->GetBinContent(hleadJetEta_fastsim->GetNbinsX())+hleadJetEta_fastsim->GetBinContent(hleadJetEta_fastsim->GetNbinsX()+1));
+  hleadJetEta->SetBinContent(hleadJetEta->GetNbinsX(), hleadJetEta->GetBinContent(hleadJetEta->GetNbinsX())+hleadJetEta->GetBinContent(hleadJetEta->GetNbinsX()+1));
   hleadJetEta->SetStats(false);
   hleadJetEta->SetLineWidth(3);
   hleadJetEta->SetLineColor(kRed);
   hleadJetEta->GetXaxis()->SetTitle("Leading Jet Eta");
-  hleadJetEta->DrawNormalized();
   hleadJetEta_fastsim->SetStats(false);
   hleadJetEta_fastsim->SetLineWidth(3);
   hleadJetEta_fastsim->SetLineColor(kBlue);
-  hleadJetEta_fastsim->DrawNormalized("same");
+  hleadJetEta->Scale(1./(hleadJetEta->Integral()));
+  hleadJetEta_fastsim->Scale(1./(hleadJetEta_fastsim->Integral()));
+  hleadJetEta->Draw();
+  hleadJetEta->GetYaxis()->SetRangeUser(0.000001,5.);
+  hleadJetEta_fastsim->Draw("same");
 
-  TLegend* leg10 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp11 = new TRatioPlot(hleadJetEta_fastsim,hleadJetEta);
+  rp11->Draw();
+  rp11->GetLowerRefGraph()->SetMinimum(0.5);
+  rp11->GetLowerRefGraph()->SetMaximum(1.5);
+  rp11->GetLowerRefYaxis()->SetTitle("ratio");
+  rp11->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp11->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp11->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp11->GetLowerRefYaxis()->SetNdivisions(303);
+  rp11->SetLowTopMargin(0.3);
+  rp11->GetUpperPad()->cd();
+  TLegend* leg10 = new TLegend(0.55,0.75,0.89,0.87);
+  leg10->SetBorderSize(0);
   leg10->AddEntry(hleadJetEta,"FullSim Sample");
   leg10->AddEntry(hleadJetEta_fastsim,"FastSim Sample");
   leg10->Draw();
+  cleadJetEta->Update();
 
   calljetpt->cd();
+  calljetpt->SetLogy();
+  halljetpt_fastsim->SetBinContent(halljetpt_fastsim->GetNbinsX(), halljetpt_fastsim->GetBinContent(halljetpt_fastsim->GetNbinsX())+halljetpt_fastsim->GetBinContent(halljetpt_fastsim->GetNbinsX()+1));
+  halljetpt->SetBinContent(halljetpt->GetNbinsX(), halljetpt->GetBinContent(halljetpt->GetNbinsX())+halljetpt->GetBinContent(halljetpt->GetNbinsX()+1));
   halljetpt->SetStats(false);
   halljetpt->SetLineWidth(3);
   halljetpt->SetLineColor(kRed);
   halljetpt->GetXaxis()->SetTitle("All Jet p_{T} [GeV]");
-  halljetpt->DrawNormalized();
   halljetpt_fastsim->SetStats(false);
   halljetpt_fastsim->SetLineWidth(3);
   halljetpt_fastsim->SetLineColor(kBlue);
-  halljetpt_fastsim->DrawNormalized("same");
+  halljetpt->Scale(1./(halljetpt->Integral()));
+  halljetpt_fastsim->Scale(1./(halljetpt_fastsim->Integral()));
+  halljetpt->Draw();
+  halljetpt_fastsim->Draw("same");
 
-  TLegend* leg11 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp12 = new TRatioPlot(halljetpt_fastsim,halljetpt);
+  rp12->Draw();
+  rp12->GetLowerRefGraph()->SetMinimum(0.5);
+  rp12->GetLowerRefGraph()->SetMaximum(1.5);
+  rp12->GetLowerRefYaxis()->SetTitle("ratio");
+  rp12->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp12->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp12->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp12->GetLowerRefYaxis()->SetNdivisions(303);
+  rp12->SetLowTopMargin(0.3);
+  rp12->GetUpperPad()->cd();
+  TLegend* leg11 = new TLegend(0.55,0.75,0.89,0.87);
+  leg11->SetBorderSize(0);
   leg11->AddEntry(halljetpt,"FullSim Sample");
   leg11->AddEntry(halljetpt_fastsim,"FastSim Sample");
   leg11->Draw();
+  calljetpt->Update();
 
   calljeteta->cd();
+  calljeteta->SetLogy();
+  halljeteta_fastsim->SetBinContent(halljeteta_fastsim->GetNbinsX(), halljeteta_fastsim->GetBinContent(halljeteta_fastsim->GetNbinsX())+halljeteta_fastsim->GetBinContent(halljeteta_fastsim->GetNbinsX()+1));
+  halljeteta->SetBinContent(halljeteta->GetNbinsX(), halljeteta->GetBinContent(halljeteta->GetNbinsX())+halljeteta->GetBinContent(halljeteta->GetNbinsX()+1));
   halljeteta->SetStats(false);
   halljeteta->SetLineWidth(3);
   halljeteta->SetLineColor(kRed);
   halljeteta->GetXaxis()->SetTitle("All Jet Eta");
-  halljeteta->DrawNormalized();
   halljeteta_fastsim->SetStats(false);
   halljeteta_fastsim->SetLineWidth(3);
   halljeteta_fastsim->SetLineColor(kBlue);
-  halljeteta_fastsim->DrawNormalized("same");
+  halljeteta->Scale(1./(halljeteta->Integral()));
+  halljeteta_fastsim->Scale(1./(halljeteta_fastsim->Integral()));
+  halljeteta->Draw();
+  halljeteta_fastsim->Draw("same");
 
-  TLegend* leg12 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp13 = new TRatioPlot(halljeteta_fastsim,halljeteta);
+  rp13->Draw();
+  rp13->GetLowerRefGraph()->SetMinimum(0.5);
+  rp13->GetLowerRefGraph()->SetMaximum(1.5);
+  rp13->GetLowerRefYaxis()->SetTitle("ratio");
+  rp13->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp13->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp13->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp13->GetLowerRefYaxis()->SetNdivisions(303);
+  rp13->SetLowTopMargin(0.3);
+  rp13->GetUpperPad()->cd();
+
+  TLegend* leg12 = new TLegend(0.55,0.75,0.89,0.87);
+  leg12->SetBorderSize(0);
   leg12->AddEntry(halljeteta,"FullSim Sample");
   leg12->AddEntry(halljeteta_fastsim,"FastSim Sample");
   leg12->Draw();
+  calljeteta->Update();
 
   clep1pt->cd();
+  clep1pt->SetLogy();
+  hlep1pt_fastsim->SetBinContent(hlep1pt_fastsim->GetNbinsX(), hlep1pt_fastsim->GetBinContent(hlep1pt_fastsim->GetNbinsX())+hlep1pt_fastsim->GetBinContent(hlep1pt_fastsim->GetNbinsX()+1));
+  hlep1pt->SetBinContent(hlep1pt->GetNbinsX(), hlep1pt->GetBinContent(hlep1pt->GetNbinsX())+hlep1pt->GetBinContent(hlep1pt->GetNbinsX()+1));
   hlep1pt->SetStats(false);
   hlep1pt->SetLineWidth(3);
   hlep1pt->SetLineColor(kRed);
   hlep1pt->GetXaxis()->SetTitle("Lepton 1 p_{T} [GeV]");
-  hlep1pt->DrawNormalized();
   hlep1pt_fastsim->SetStats(false);
   hlep1pt_fastsim->SetLineWidth(3);
   hlep1pt_fastsim->SetLineColor(kBlue);
-  hlep1pt_fastsim->DrawNormalized("same");
+  hlep1pt->Scale(1./(hlep1pt->Integral()));
+  hlep1pt_fastsim->Scale(1./(hlep1pt_fastsim->Integral()));
+  hlep1pt->Draw();
+  hlep1pt_fastsim->Draw("same");
 
-  TLegend* leg13 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp14 = new TRatioPlot(hlep1pt_fastsim,hlep1pt);
+  rp14->Draw();
+  rp14->GetLowerRefGraph()->SetMinimum(0.5);
+  rp14->GetLowerRefGraph()->SetMaximum(1.5);
+  rp14->GetLowerRefYaxis()->SetTitle("ratio");
+  rp14->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp14->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp14->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp14->GetLowerRefYaxis()->SetNdivisions(303);
+  rp14->SetLowTopMargin(0.3);
+  rp14->GetUpperPad()->cd();
+  TLegend* leg13 = new TLegend(0.55,0.75,0.89,0.87);
+  leg13->SetBorderSize(0);
   leg13->AddEntry(hlep1pt,"FullSim Sample");
   leg13->AddEntry(hlep1pt_fastsim,"FastSim Sample");
   leg13->Draw();
+  clep1pt->Update();
 
   clep2pt->cd();
+  clep2pt->SetLogy();
+  hlep2pt_fastsim->SetBinContent(hlep2pt_fastsim->GetNbinsX(), hlep2pt_fastsim->GetBinContent(hlep2pt_fastsim->GetNbinsX())+hlep2pt_fastsim->GetBinContent(hlep2pt_fastsim->GetNbinsX()+1));
+  hlep2pt->SetBinContent(hlep2pt->GetNbinsX(), hlep2pt->GetBinContent(hlep2pt->GetNbinsX())+hlep2pt->GetBinContent(hlep2pt->GetNbinsX()+1));
   hlep2pt->SetStats(false);
   hlep2pt->SetLineWidth(3);
   hlep2pt->SetLineColor(kRed);
   hlep2pt->GetXaxis()->SetTitle("Lepton 2  p_{T} [GeV]");
-  hlep2pt->DrawNormalized();
   hlep2pt_fastsim->SetStats(false);
   hlep2pt_fastsim->SetLineWidth(3);
   hlep2pt_fastsim->SetLineColor(kBlue);
-  hlep2pt_fastsim->DrawNormalized("same");
+  hlep2pt->Scale(1./(hlep2pt->Integral()));
+  hlep2pt_fastsim->Scale(1./(hlep2pt_fastsim->Integral()));
+  hlep2pt->Draw();
+  hlep2pt_fastsim->Draw("same");
 
-  TLegend* leg14 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp15 = new TRatioPlot(hlep2pt_fastsim,hlep2pt);
+  rp15->Draw();
+  rp15->GetLowerRefGraph()->SetMinimum(0.5);
+  rp15->GetLowerRefGraph()->SetMaximum(1.5);
+  rp15->GetLowerRefYaxis()->SetTitle("ratio");
+  rp15->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp15->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp15->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp15->GetLowerRefYaxis()->SetNdivisions(303);
+  rp15->SetLowTopMargin(0.3);
+  rp15->GetUpperPad()->cd();
+  TLegend* leg14 = new TLegend(0.55,0.75,0.89,0.87);
+  leg14->SetBorderSize(0);
   leg14->AddEntry(hlep2pt,"FullSim Sample");
   leg14->AddEntry(hlep2pt_fastsim,"FastSim Sample");
   leg14->Draw();
+  clep2pt->Update();
 
   clep2eta->cd();
+  clep2eta->SetLogy();
+  hlep2eta_fastsim->SetBinContent(hlep2eta_fastsim->GetNbinsX(), hlep2eta_fastsim->GetBinContent(hlep2eta_fastsim->GetNbinsX())+hlep2eta_fastsim->GetBinContent(hlep2eta_fastsim->GetNbinsX()+1));
+  hlep2eta->SetBinContent(hlep2eta->GetNbinsX(), hlep2eta->GetBinContent(hlep2eta->GetNbinsX())+hlep2eta->GetBinContent(hlep2eta->GetNbinsX()+1));
   hlep2eta->SetStats(false);
   hlep2eta->SetLineWidth(3);
   hlep2eta->SetLineColor(kRed);
   hlep2eta->GetXaxis()->SetTitle("Lepton 2 Eta");
-  hlep2eta->DrawNormalized();
   hlep2eta_fastsim->SetStats(false);
   hlep2eta_fastsim->SetLineWidth(3);
   hlep2eta_fastsim->SetLineColor(kBlue);
-  hlep2eta_fastsim->DrawNormalized("same");
+  hlep2eta->Scale(1./(hlep2eta->Integral()));
+  hlep2eta_fastsim->Scale(1./(hlep2eta_fastsim->Integral()));
+  hlep2eta->Draw();
+  hlep2eta_fastsim->Draw("same");
 
-  TLegend* leg15 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp16 = new TRatioPlot(hlep2eta_fastsim,hlep2eta);
+  rp16->Draw();
+  rp16->GetLowerRefGraph()->SetMinimum(0.5);
+  rp16->GetLowerRefGraph()->SetMaximum(1.5);
+  rp16->GetLowerRefYaxis()->SetTitle("ratio");
+  rp16->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp16->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp16->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp16->GetLowerRefYaxis()->SetNdivisions(303);
+  rp16->SetLowTopMargin(0.3);
+  rp16->GetUpperPad()->cd();
+  TLegend* leg15 = new TLegend(0.55,0.75,0.89,0.87);
+  leg15->SetBorderSize(0);
   leg15->AddEntry(hlep2eta,"FullSim Sample");
   leg15->AddEntry(hlep2eta_fastsim,"FastSim Sample");
   leg15->Draw();
+  clep2eta->Update();
 
   clep1eta->cd();
+  clep1eta->SetLogy();
+  hlep1eta_fastsim->SetBinContent(hlep1eta_fastsim->GetNbinsX(), hlep1eta_fastsim->GetBinContent(hlep1eta_fastsim->GetNbinsX())+hlep1eta_fastsim->GetBinContent(hlep1eta_fastsim->GetNbinsX()+1));
+  hlep1eta->SetBinContent(hlep1eta->GetNbinsX(), hlep1eta->GetBinContent(hlep1eta->GetNbinsX())+hlep1eta->GetBinContent(hlep1eta->GetNbinsX()+1));
   hlep1eta->SetStats(false);
   hlep1eta->SetLineWidth(3);
   hlep1eta->SetLineColor(kRed);
   hlep1eta->GetXaxis()->SetTitle("Lepton 1 Eta");
-  hlep1eta->DrawNormalized();
   hlep1eta_fastsim->SetStats(false);
   hlep1eta_fastsim->SetLineWidth(3);
   hlep1eta_fastsim->SetLineColor(kBlue);
-  hlep1eta_fastsim->DrawNormalized("same");
+  hlep1eta->Scale(1./(hlep1eta->Integral()));
+  hlep1eta_fastsim->Scale(1./(hlep1eta_fastsim->Integral()));
+  hlep1eta->Draw();
+  hlep1eta_fastsim->Draw("same");
 
-  TLegend* leg16 = new TLegend(0.1,0.7,0.48,0.9);
+  auto rp17 = new TRatioPlot(hlep1eta_fastsim,hlep1eta);
+  rp17->Draw();
+  rp17->GetLowerRefGraph()->SetMinimum(0.5);
+  rp17->GetLowerRefGraph()->SetMaximum(1.5);
+  rp17->GetLowerRefYaxis()->SetTitle("ratio");
+  rp17->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp17->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp17->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp17->GetLowerRefYaxis()->SetNdivisions(303);
+  rp17->SetLowTopMargin(0.3);
+  rp17->GetUpperPad()->cd();
+  TLegend* leg16 = new TLegend(0.55,0.75,0.89,0.87);
+  leg16->SetBorderSize(0);
   leg16->AddEntry(hlep1eta,"FullSim Sample");
   leg16->AddEntry(hlep1eta_fastsim,"FastSim Sample");
   leg16->Draw();
-
-
+  clep1eta->Update();
 
   //Output file for Histograms
   TFile *fNumbers = new TFile("MirandasPlots.root","recreate");
@@ -608,8 +1094,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(heta);
   fNumbers->Add(hlep1_dphiMET);
   fNumbers->Add(hmindphi_met_j1_j2);
-  //fNumbers->Add(hMT2);
-  //fNumbers->Add(hMCT);
+  fNumbers->Add(hMT2ll);
+  fNumbers->Add(hMCT);
   fNumbers->Add(htopnessMod);
   fNumbers->Add(hngoodleps);
   fNumbers->Add(hngoodbtags);
@@ -627,6 +1113,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
 
   fNumbers->Add(hpfmet_fastsim);
+  fNumbers->Add(hpfmet_fastsim_filt);
   fNumbers->Add(hmht_fastsim);
   //fNumbers->Add(hv2met_fastsim);
   fNumbers->Add(hmt_met_lep_fastsim);
@@ -637,8 +1124,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   //fNumbers->Add(heta_fastsim);
   fNumbers->Add(hlep1_dphiMET_fastsim);
   fNumbers->Add(hmindphi_met_j1_j2_fastsim);
-  //fNumbers->Add(hMT2_fastsim);
-  //fNumbers->Add(hMCT_fastsim);
+  fNumbers->Add(hMT2ll_fastsim);
+  fNumbers->Add(hMCT_fastsim);
   fNumbers->Add(htopnessMod_fastsim);
   fNumbers->Add(hngoodleps_fastsim);
   fNumbers->Add(hngoodbtags_fastsim);
@@ -656,6 +1143,7 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 
 
   fNumbers->Add(cpfmet);
+  fNumbers->Add(cpfmet_filt);
   fNumbers->Add(cmht);
   fNumbers->Add(cmt_met_lep);
   fNumbers->Add(cngoodjets);
@@ -665,6 +1153,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(cngoodleps);
   fNumbers->Add(cngoodbtags);
   fNumbers->Add(cMT2);
+  fNumbers->Add(cMT2ll);
+  fNumbers->Add(cMCT);
   fNumbers->Add(cleadJetPt);
   fNumbers->Add(cleadJetEta);
   fNumbers->Add(clep1pt);
