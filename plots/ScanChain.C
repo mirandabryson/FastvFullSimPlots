@@ -10,7 +10,7 @@
 #include "TChain.h"
 #include "TDirectory.h"
 #include "TFile.h"
-#include "TROOT.h"
+#include "TROOT.h" 
 #include "TTreeCache.h"
 #include "TCanvas.h"
 #include "TLegend.h"
@@ -96,6 +96,10 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   halljeteta->SetDirectory(rootdir);
   TH1F *hleadJetEta = new TH1F("hleadJetEta", "leadJetEta", 20, -2.4, 2.4);
   hleadJetEta->SetDirectory(rootdir);
+  TH1F *hmetres = new TH1F("hmetres", "metres", 100, -100, 100);
+  hmetres->SetDirectory(rootdir);
+  //  TH2F *hgenvpfmet = new TH2F("hgenvpfmet", "genvpfmet", 40, 0, 1200, 40, 0, 1200);
+  //  hgenvpfmet->SetDirectory(rootdir);
 
   //Defining fastsim histos
   TH1F *hpfmet_fastsim = new TH1F("hpfmet_fastsim", "pfmet", 40,0,1200);
@@ -153,9 +157,11 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   halljeteta_fastsim->SetDirectory(rootdir);
   TH1F *hleadJetEta_fastsim = new TH1F("hleadJetEta_fastsim", "leadJetEta", 20, -2.4, 2.4);
   hleadJetEta_fastsim->SetDirectory(rootdir);
+  TH1F *hmetres_fastsim = new TH1F("hmetres_fastsim", "metres", 100, -100, 100);
+  hmetres_fastsim->SetDirectory(rootdir);
 
-
-
+  //  TH2F *hgenvpfmet_fastsim = new TH2F("hgenvpfmet_fastsim", "genvpfmet", 40, 0, 1200, 40, 0, 1200);
+  //  hgenvpfmet->SetDirectory(rootdir);
 
   //Canvas definition
   TCanvas *cpfmet = new TCanvas("cpfmet","cpfmet",800,800);
@@ -179,7 +185,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   TCanvas *calljetpt = new TCanvas("calljetpt","calljetpt",800,800);
   TCanvas *calljeteta = new TCanvas("calljeteta","calljeteta",800,800);
   TCanvas *cleadJetEta = new TCanvas("cleadJetEta", "cleadJetEta", 800, 800);
-
+  TCanvas *cmetres = new TCanvas("cmetres", "cmetres", 800, 800);
+  //  TCanvas *cgenvpfmet = new TCanvas("cgenvpfmet", "cgenvpfmet", 800, 800);
 
 //TCanvas *cmassStop = new TCanvas("cmassStop","cmassStop",800,800);
 
@@ -289,6 +296,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	  halljeteta_fastsim->Fill(ak4pfjets_p4().at(ijets).eta(), totalWeight);
 
 	}
+	hmetres_fastsim->Fill((genmet()-pfmet()), totalWeight);
+	//	hgenvpfmet_fastsim->Fill(genmet(),pfmet(), totalWeight);
 
       } else{
 	//if "fastsim" isn't in the title, then fill these histos instead
@@ -336,11 +345,16 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
 	hlep1eta->Fill(lep1_p4().eta(), totalWeightFull);
 	hlep2pt->Fill(lep2_p4().pt(), totalWeightFull);
 	hlep2eta->Fill(lep2_p4().eta(), totalWeightFull);
+
+	hmetres->Fill((genmet()-pfmet()), totalWeightFull);
+	//	hgenvpfmet->Fill(genmet(),pfmet(), totalWeightFull);
+
 	for(unsigned int ijets = 0; ijets < ak4pfjets_p4().size(); ijets++){
 	  halljetpt->Fill(ak4pfjets_p4().at(ijets).pt(), totalWeightFull);
 	  halljeteta->Fill(ak4pfjets_p4().at(ijets).eta(), totalWeightFull);
 	}
       }
+
     }
   
     // Clean Up
@@ -1081,6 +1095,53 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   leg16->Draw();
   clep1eta->Update();
 
+  cmetres->cd();
+  cmetres->SetLogy();
+  hmetres_fastsim->SetBinContent(hmetres_fastsim->GetNbinsX(), hmetres_fastsim->GetBinContent(hmetres_fastsim->GetNbinsX())+hmetres_fastsim->GetBinContent(hmetres_fastsim->GetNbinsX()+1));
+  hmetres->SetBinContent(hmetres->GetNbinsX(), hmetres->GetBinContent(hmetres->GetNbinsX())+hmetres->GetBinContent(hmetres->GetNbinsX()+1));
+  hmetres->SetStats(false);
+  hmetres->SetLineWidth(3);
+  hmetres->SetLineColor(kRed);
+  hmetres->GetXaxis()->SetTitle("MET Resolution");
+  hmetres_fastsim->SetStats(false);
+  hmetres_fastsim->SetLineWidth(3);
+  hmetres_fastsim->SetLineColor(kBlue);
+  hmetres->Scale(1./(hmetres->Integral()));
+  hmetres_fastsim->Scale(1./(hmetres_fastsim->Integral()));
+  hmetres->Draw();
+  hmetres_fastsim->Draw("same");
+
+  auto rp18 = new TRatioPlot(hmetres_fastsim,hmetres);
+  rp18->Draw();
+  rp18->GetLowerRefGraph()->SetMinimum(0.5);
+  rp18->GetLowerRefGraph()->SetMaximum(1.5);
+  rp18->GetLowerRefYaxis()->SetTitle("ratio");
+  rp18->GetLowerRefYaxis()->SetTitleOffset(1.6);
+  rp18->GetLowerRefYaxis()->SetLabelSize(0.03);
+  rp18->GetLowerRefYaxis()->SetTitleSize(0.03);
+  rp18->GetLowerRefYaxis()->SetNdivisions(303);
+  rp18->SetLowTopMargin(0.3);
+  rp18->GetUpperPad()->cd();
+  TLegend* leg17 = new TLegend(0.55,0.75,0.89,0.87);
+  leg17->SetBorderSize(0);
+  leg17->AddEntry(hmetres,"FullSim Sample");
+  leg17->AddEntry(hmetres_fastsim,"FastSim Sample");
+  leg17->Draw();
+  cmetres->Update();
+
+  //  cgenvpfmet->cd();
+  //  hgenvpfmet_fastsim->SetBinContent(hgenvpfmet_fastsim->GetNbinsX(), hgenvpfmet_fastsim->GetBinContent(hgenvpfmet_fastsim->GetNbinsX())+hgenvpfmet_fastsim->GetBinContent(hgenvpfmet_fastsim->GetNbinsX()+1));
+  //  hgenvpfmet->SetBinContent(hgenvpfmet->GetNbinsX(), hgenvpfmet->GetBinContent(hgenvpfmet->GetNbinsX())+hgenvpfmet->GetBinContent(hgenvpfmet->GetNbinsX()+1));
+  //  hgenvpfmet->SetFillColor(kRed);
+  //  hgenvpfmet->GetXaxis()->SetTitle("genmet v pfmet");
+  //  hgenvpfmet_fastsim->SetFillColor(kBlue);
+  //  hgenvpfmet->Scale(1./(hgenvpfmet->Integral()));
+  //  hgenvpfmet_fastsim->Scale(1./(hgenvpfmet_fastsim->Integral()));
+  //  hgenvpfmet->Draw("box");
+  //  hgenvpfmet_fastsim->Draw("box same");
+
+
+
   //Output file for Histograms
   TFile *fNumbers = new TFile("MirandasPlots.root","recreate");
   fNumbers->Add(hpfmet);
@@ -1110,7 +1171,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(hlep2eta);
   fNumbers->Add(halljetpt);
   fNumbers->Add(halljeteta);
-
+  fNumbers->Add(hmetres);
+  //  fNumbers->Add(hgenvpfmet);
 
   fNumbers->Add(hpfmet_fastsim);
   fNumbers->Add(hpfmet_fastsim_filt);
@@ -1140,7 +1202,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(hlep2eta_fastsim);
   fNumbers->Add(halljetpt_fastsim);
   fNumbers->Add(halljeteta_fastsim);
-
+  fNumbers->Add(hmetres_fastsim);
+  //  fNumbers->Add(hgenvpfmet_fastsim);
 
   fNumbers->Add(cpfmet);
   fNumbers->Add(cpfmet_filt);
@@ -1163,6 +1226,8 @@ int ScanChain(TChain* chain, bool fast = true, int nEvents = -1, string skimFile
   fNumbers->Add(clep2eta);
   fNumbers->Add(calljetpt);
   fNumbers->Add(calljeteta);
+  fNumbers->Add(cmetres);
+  //  fNumbers->Add(cgenvpfmet);
 
   //fNumbers->Add(cmassStop);
   fNumbers->Write();  
